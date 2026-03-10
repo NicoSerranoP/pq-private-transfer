@@ -143,7 +143,7 @@ Build a page that demonstrates both individual and batched contract interactions
 
 ## How to Test
 
-1. Deploy the contract: `yarn deploy`
-2. Start the frontend: `yarn start`
+1. Deploy the contract: `pnpm deploy`
+2. Start the frontend: `pnpm start`
 3. For basic batching: use any wallet on localhost
 4. For advanced capabilities (paymasters, atomic execution): deploy to a live testnet and connect with an [EIP-5792 compliant wallet](https://www.eip5792.xyz/ecosystem/wallets)

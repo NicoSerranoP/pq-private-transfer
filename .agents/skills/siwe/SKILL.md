@@ -20,7 +20,7 @@ This skill covers integrating SIWE into an SE-2 project using [viem's native SIW
 Add `iron-session` to the nextjs workspace for encrypted cookie-based session management:
 
 ```bash
-yarn workspace @se-2/nextjs add iron-session
+pnpm --filter @se-2/nextjs add iron-session
 ```
 
 Everything else (viem, wagmi, RainbowKit) is already in SE-2. Viem provides all SIWE utilities natively — **do not install the `siwe` npm package**.
@@ -535,7 +535,7 @@ The hook returns these properties:
 
 ## How to Test
 
-1. Start the frontend: `yarn start`
+1. Start the frontend: `pnpm start`
 2. Connect a wallet — MetaMask, Coinbase Wallet, and the burner wallet all support `personal_sign` which is what SIWE uses
 3. Click "Sign In" — review the SIWE message in the wallet popup, confirm
 4. The session persists across page refreshes (encrypted cookie)

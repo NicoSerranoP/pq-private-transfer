@@ -15,7 +15,7 @@
     "flatten": "hardhat flatten",
     "fork": "MAINNET_FORKING_ENABLED=true hardhat node",
     "format": "prettier --write './**/*.(ts|sol)'",
-    "generate": "yarn account:generate",
+    "generate": "pnpm account:generate",
     "hardhat-verify": "hardhat verify",
     "lint": "eslint",
     "lint-staged": "eslint",

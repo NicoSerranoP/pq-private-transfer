@@ -1,25 +1,22 @@
-import { FlatCompat } from "@eslint/eslintrc";
+import nextPlugin from "@next/eslint-plugin-next";
+import tsParser from "@typescript-eslint/parser";
 import prettierPlugin from "eslint-plugin-prettier";
 import { defineConfig } from "eslint/config";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
 
 export default defineConfig([
   {
+    files: ["**/*.{js,jsx,ts,tsx}"],
+    ignores: [".next/**", "node_modules/**", "contracts/**", "out/**"],
     plugins: {
+      "@next/next": nextPlugin,
       prettier: prettierPlugin,
     },
-    extends: compat.extends("next/core-web-vitals", "next/typescript", "prettier"),
-
+    languageOptions: {
+      parser: tsParser,
+    },
     rules: {
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/ban-ts-comment": "off",
+      ...nextPlugin.configs.recommended.rules,
+      ...nextPlugin.configs["core-web-vitals"].rules,
 
       "prettier/prettier": [
         "warn",

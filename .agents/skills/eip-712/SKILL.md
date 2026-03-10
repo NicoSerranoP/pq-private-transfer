@@ -222,7 +222,7 @@ export async function POST(req: Request) {
 
 ## How to Test
 
-1. Start the frontend: `yarn start`
+1. Start the frontend: `pnpm start`
 2. Connect a wallet — the burner wallet, MetaMask, Coinbase Wallet all support `eth_signTypedData_v4`
 3. Fill in the name and message fields, click Sign, review the typed data in the wallet popup
 4. Verify on frontend (instant, client-side) or backend (API route call)
