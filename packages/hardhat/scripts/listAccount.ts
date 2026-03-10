@@ -1,8 +1,7 @@
-import * as dotenv from "dotenv";
-dotenv.config();
+import "dotenv/config";
 import { ethers, Wallet } from "ethers";
 import QRCode from "qrcode";
-import { config } from "hardhat";
+import hre from "hardhat";
 import password from "@inquirer/password";
 
 async function main() {
@@ -28,13 +27,14 @@ async function main() {
   console.log("Public address:", address, "\n");
 
   // Balance on each network
-  const availableNetworks = config.networks;
+  const availableNetworks = hre.config.networks;
   for (const networkName in availableNetworks) {
     try {
       const network = availableNetworks[networkName];
       if (!("url" in network)) continue;
-      const provider = new ethers.JsonRpcProvider(network.url);
-      await provider._detectNetwork();
+      const url = await network.url.get();
+      const provider = new ethers.JsonRpcProvider(url);
+      await provider.getNetwork();
       const balance = await provider.getBalance(address);
       console.log("--", networkName, "-- 📡");
       console.log("   balance:", +ethers.formatEther(balance));

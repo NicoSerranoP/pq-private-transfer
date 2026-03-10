@@ -3,12 +3,11 @@
  *
  * This script generates the file containing the contracts Abi definitions.
  * These definitions are used to derive the types needed in the custom scaffold-eth hooks, for example.
- * This script should run as the last deploy script.
+ * This script should run after `hardhat ignition deploy`.
  */
 
 import * as fs from "fs";
 import prettier from "prettier";
-import { DeployFunction } from "hardhat-deploy/types";
 
 const generatedContractComment = `
 /**
@@ -17,21 +16,31 @@ const generatedContractComment = `
  */
 `;
 
-const DEPLOYMENTS_DIR = "./deployments";
+const IGNITION_DEPLOYMENTS_DIR = "./ignition/deployments";
 const ARTIFACTS_DIR = "./artifacts";
 
-function getDirectories(path: string) {
+function getChainDirectories() {
+  if (!fs.existsSync(IGNITION_DEPLOYMENTS_DIR)) return [];
   return fs
-    .readdirSync(path, { withFileTypes: true })
-    .filter(dirent => dirent.isDirectory())
-    .map(dirent => dirent.name);
+    .readdirSync(IGNITION_DEPLOYMENTS_DIR, { withFileTypes: true })
+    .filter(d => d.isDirectory() && d.name.startsWith("chain-"))
+    .map(d => d.name);
 }
 
-function getContractNames(path: string) {
-  return fs
-    .readdirSync(path, { withFileTypes: true })
-    .filter(dirent => dirent.isFile() && dirent.name.endsWith(".json"))
-    .map(dirent => dirent.name.split(".")[0]);
+function getArtifactForContract(contractName: string): { abi: any[]; sourceName: string } | null {
+  // Walk artifacts/contracts looking for <ContractName>.json
+  const contractsDir = `${ARTIFACTS_DIR}/contracts`;
+  if (!fs.existsSync(contractsDir)) return null;
+
+  for (const solFile of fs.readdirSync(contractsDir, { withFileTypes: true })) {
+    if (!solFile.isDirectory()) continue;
+    const artifactPath = `${contractsDir}/${solFile.name}/${contractName}.json`;
+    if (fs.existsSync(artifactPath)) {
+      const artifact = JSON.parse(fs.readFileSync(artifactPath).toString());
+      return { abi: artifact.abi, sourceName: `contracts/${solFile.name}/${contractName}.sol` };
+    }
+  }
+  return null;
 }
 
 function getActualSourcesForContract(sources: Record<string, any>, contractName: string) {
@@ -44,9 +53,7 @@ function getActualSourcesForContract(sources: Record<string, any>, contractName:
 
       if (match) {
         const inheritancePart = match[2];
-        // Split the inherited contracts by commas to get the list of inherited contracts
         const inheritedContracts = inheritancePart.split(",").map(contract => `${contract.trim()}.sol`);
-
         return inheritedContracts;
       }
       return [];
@@ -62,11 +69,14 @@ function getInheritedFunctions(sources: Record<string, any>, contractName: strin
   for (const sourceContractName of actualSources) {
     const sourcePath = Object.keys(sources).find(key => key.includes(`/${sourceContractName}`));
     if (sourcePath) {
-      const sourceName = sourcePath?.split("/").pop()?.split(".sol")[0];
-      const { abi } = JSON.parse(fs.readFileSync(`${ARTIFACTS_DIR}/${sourcePath}/${sourceName}.json`).toString());
-      for (const functionAbi of abi) {
-        if (functionAbi.type === "function") {
-          inheritedFunctions[functionAbi.name] = sourcePath;
+      const srcName = sourcePath.split("/").pop()?.split(".sol")[0];
+      const artifactPath = `${ARTIFACTS_DIR}/${sourcePath}/${srcName}.json`;
+      if (fs.existsSync(artifactPath)) {
+        const { abi } = JSON.parse(fs.readFileSync(artifactPath).toString());
+        for (const functionAbi of abi) {
+          if (functionAbi.type === "function") {
+            inheritedFunctions[functionAbi.name] = sourcePath;
+          }
         }
       }
     }
@@ -75,40 +85,79 @@ function getInheritedFunctions(sources: Record<string, any>, contractName: strin
   return inheritedFunctions;
 }
 
-function getContractDataFromDeployments() {
-  if (!fs.existsSync(DEPLOYMENTS_DIR)) {
-    throw Error("At least one other deployment script should exist to generate an actual contract.");
-  }
-  const output = {} as Record<string, any>;
-  const chainDirectories = getDirectories(DEPLOYMENTS_DIR);
-  for (const chainName of chainDirectories) {
-    let chainId;
+function getSourcesFromBuildInfo(contractName: string): Record<string, any> | null {
+  const buildInfoDir = `${ARTIFACTS_DIR}/build-info`;
+  if (!fs.existsSync(buildInfoDir)) return null;
+
+  for (const file of fs.readdirSync(buildInfoDir)) {
+    if (!file.endsWith(".json")) continue;
     try {
-      chainId = fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/.chainId`).toString();
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
-      console.log(`No chainId file found for ${chainName}`);
-      continue;
+      const buildInfo = JSON.parse(fs.readFileSync(`${buildInfoDir}/${file}`).toString());
+      // Check if this build-info contains our contract
+      const outputSources = buildInfo?.output?.sources ?? {};
+      const hasContract = Object.keys(outputSources).some(k => k.endsWith(`${contractName}.sol`));
+      if (hasContract) {
+        // Return a sources map: path -> { content }
+        const inputSources = buildInfo?.input?.sources ?? {};
+        return inputSources;
+      }
+    } catch {
+      // skip malformed build info
     }
+  }
+  return null;
+}
+
+function getContractDataFromDeployments() {
+  const output = {} as Record<string, any>;
+  const chainDirs = getChainDirectories();
+
+  for (const chainDir of chainDirs) {
+    const chainId = chainDir.replace("chain-", "");
+    const deployedAddressesPath = `${IGNITION_DEPLOYMENTS_DIR}/${chainDir}/deployed_addresses.json`;
+
+    if (!fs.existsSync(deployedAddressesPath)) continue;
+
+    const deployedAddresses: Record<string, string> = JSON.parse(fs.readFileSync(deployedAddressesPath).toString());
 
     const contracts = {} as Record<string, any>;
-    for (const contractName of getContractNames(`${DEPLOYMENTS_DIR}/${chainName}`)) {
-      const { abi, address, metadata, receipt } = JSON.parse(
-        fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/${contractName}.json`).toString(),
-      );
-      const inheritedFunctions = metadata ? getInheritedFunctions(JSON.parse(metadata).sources, contractName) : {};
-      contracts[contractName] = { address, abi, inheritedFunctions, deployedOnBlock: receipt?.blockNumber };
+
+    for (const [futureId, address] of Object.entries(deployedAddresses)) {
+      // futureId format: "ModuleName#ContractName"
+      const contractName = futureId.split("#")[1];
+      if (!contractName) continue;
+
+      // Try to read the artifact from the ignition deployment folder first
+      const ignitionArtifactPath = `${IGNITION_DEPLOYMENTS_DIR}/${chainDir}/artifacts/${futureId}.json`;
+      let abi: any[] = [];
+
+      if (fs.existsSync(ignitionArtifactPath)) {
+        const artifact = JSON.parse(fs.readFileSync(ignitionArtifactPath).toString());
+        abi = artifact.abi ?? [];
+      } else {
+        // Fall back to the build artifacts directory
+        const buildArtifact = getArtifactForContract(contractName);
+        abi = buildArtifact?.abi ?? [];
+      }
+
+      // Compute inherited functions from build-info sources
+      const sources = getSourcesFromBuildInfo(contractName);
+      const inheritedFunctions = sources ? getInheritedFunctions(sources, contractName) : {};
+
+      contracts[contractName] = { address, abi, inheritedFunctions };
     }
+
     output[chainId] = contracts;
   }
+
   return output;
 }
 
 /**
- * Generates the TypeScript contract definition file based on the json output of the contract deployment scripts
- * This script should be run last.
+ * Generates the TypeScript contract definition file based on the Ignition deployment output.
+ * Call this after `hardhat ignition deploy`.
  */
-const generateTsAbis: DeployFunction = async function () {
+export default async function generateTsAbis() {
   const TARGET_DIR = "../nextjs/contracts/";
   const allContractsData = getContractDataFromDeployments();
 
@@ -131,6 +180,4 @@ const generateTsAbis: DeployFunction = async function () {
   );
 
   console.log(`📝 Updated TypeScript contract definition file on ${TARGET_DIR}deployedContracts.ts`);
-};
-
-export default generateTsAbis;
+}
