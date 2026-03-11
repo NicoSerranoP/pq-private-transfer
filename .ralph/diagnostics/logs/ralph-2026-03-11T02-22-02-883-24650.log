@@ -1,0 +1,301 @@
+[2m2026-03-11T07:22:02.897267Z[0m [33m WARN[0m [2mralph::loop_runner[0m[2m:[0m Interactive mode requested but stdout is not a TTY, falling back to autonomous
+[2m2026-03-11T07:22:02.902294Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T07:22:02.902330Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T07:22:02.902339Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T07:22:02.902342Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T07:22:02.903004Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 0 open, 4 closed) into prompt
+[2m2026-03-11T07:24:00.195123Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T07:24:00.195182Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T07:24:00.195194Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T07:24:00.195199Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T07:24:00.195249Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (737 chars) into prompt
+[2m2026-03-11T07:24:00.195333Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 1 open, 3 closed) into prompt
+[2m2026-03-11T07:26:27.672478Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T07:26:27.672562Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T07:26:27.672584Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T07:26:27.672593Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T07:26:27.672717Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (1336 chars) into prompt
+[2m2026-03-11T07:26:27.672870Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 2 open, 2 closed) into prompt
+[2m2026-03-11T07:27:44.017737Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T07:27:44.017815Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T07:27:44.017871Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T07:27:44.017885Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T07:27:44.017965Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (1735 chars) into prompt
+[2m2026-03-11T07:27:44.018057Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 2 open, 2 closed) into prompt
+[2m2026-03-11T07:29:16.930508Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T07:29:16.930573Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T07:29:16.930597Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T07:29:16.930601Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T07:29:16.930641Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (2491 chars) into prompt
+[2m2026-03-11T07:29:16.930696Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 2 open, 2 closed) into prompt
+[2m2026-03-11T07:30:45.508839Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T07:30:45.508884Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T07:30:45.508896Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T07:30:45.508901Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T07:30:45.508938Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (3081 chars) into prompt
+[2m2026-03-11T07:30:45.508987Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 2 open, 2 closed) into prompt
+[2m2026-03-11T07:32:49.554526Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T07:32:49.554609Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T07:32:49.554630Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T07:32:49.554640Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T07:32:49.554708Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (3786 chars) into prompt
+[2m2026-03-11T07:32:49.554792Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 2 open, 2 closed) into prompt
+[2m2026-03-11T07:35:04.993877Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T07:35:04.993958Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T07:35:04.993978Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T07:35:04.993988Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T07:35:04.994043Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (4237 chars) into prompt
+[2m2026-03-11T07:35:04.994115Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 0 open, 4 closed) into prompt
+[2m2026-03-11T07:40:24.496823Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T07:40:24.496933Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T07:40:24.496957Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T07:40:24.496980Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T07:40:24.497039Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (5061 chars) into prompt
+[2m2026-03-11T07:40:24.497124Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 0 open, 4 closed) into prompt
+[2m2026-03-11T07:43:03.563914Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T07:43:03.563970Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T07:43:03.563983Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T07:43:03.563988Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T07:43:03.564032Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (7513 chars) into prompt
+[2m2026-03-11T07:43:03.564110Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 1 open, 3 closed) into prompt
+[2m2026-03-11T07:44:19.962299Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T07:44:19.962356Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T07:44:19.962368Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T07:44:19.962373Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T07:44:19.962411Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (7513 chars) into prompt
+[2m2026-03-11T07:44:19.962474Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 1 open, 3 closed) into prompt
+[2m2026-03-11T07:45:33.797019Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T07:45:33.797106Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T07:45:33.797118Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T07:45:33.797123Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T07:45:33.797169Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (7513 chars) into prompt
+[2m2026-03-11T07:45:33.797253Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 1 open, 3 closed) into prompt
+[2m2026-03-11T07:45:38.117336Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T07:45:38.117422Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T07:45:38.117433Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T07:45:38.117439Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T07:45:38.117475Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (7513 chars) into prompt
+[2m2026-03-11T07:45:38.117558Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 1 open, 3 closed) into prompt
+[2m2026-03-11T07:47:55.323868Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T07:47:55.323951Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T07:47:55.323973Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T07:47:55.323982Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T07:47:55.324042Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (7933 chars) into prompt
+[2m2026-03-11T07:47:55.324155Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 2 open, 2 closed) into prompt
+[2m2026-03-11T07:49:03.424712Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T07:49:03.424812Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T07:49:03.424834Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T07:49:03.424843Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T07:49:03.424901Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (7933 chars) into prompt
+[2m2026-03-11T07:49:03.425007Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 1 open, 3 closed) into prompt
+[2m2026-03-11T07:51:22.508959Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T07:51:22.509013Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T07:51:22.509025Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T07:51:22.509030Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T07:51:22.509078Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (9026 chars) into prompt
+[2m2026-03-11T07:51:22.509158Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 0 open, 4 closed) into prompt
+[2m2026-03-11T07:53:53.544009Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T07:53:53.544133Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T07:53:53.544155Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T07:53:53.544165Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T07:53:53.544240Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (11694 chars) into prompt
+[2m2026-03-11T07:53:53.544365Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 0 open, 4 closed) into prompt
+[2m2026-03-11T07:55:59.202278Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T07:55:59.202342Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T07:55:59.202351Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T07:55:59.202355Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T07:55:59.202398Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (12404 chars) into prompt
+[2m2026-03-11T07:55:59.202468Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 1 open, 3 closed) into prompt
+[2m2026-03-11T07:57:39.860616Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T07:57:39.860665Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T07:57:39.860677Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T07:57:39.860682Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T07:57:39.860721Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (13546 chars) into prompt
+[2m2026-03-11T07:57:39.860820Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 2 open, 2 closed) into prompt
+[2m2026-03-11T07:58:47.968351Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T07:58:47.968404Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T07:58:47.968416Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T07:58:47.968420Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T07:58:47.968461Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (13546 chars) into prompt
+[2m2026-03-11T07:58:47.968529Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 0 open, 4 closed) into prompt
+[2m2026-03-11T08:01:32.533307Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:01:32.533351Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:01:32.533363Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:01:32.533368Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:01:32.533417Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (14547 chars) into prompt
+[2m2026-03-11T08:01:32.533486Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 0 open, 4 closed) into prompt
+[2m2026-03-11T08:04:38.608160Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:04:38.608206Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:04:38.608227Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:04:38.608231Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:04:38.608277Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (16064 chars) into prompt
+[2m2026-03-11T08:04:38.608344Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 1 open, 3 closed) into prompt
+[2m2026-03-11T08:05:47.866100Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:05:47.866153Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:05:47.866164Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:05:47.866169Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:05:47.866210Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (16163 chars) into prompt
+[2m2026-03-11T08:05:47.866274Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 1 open, 3 closed) into prompt
+[2m2026-03-11T08:07:56.978338Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:07:56.978385Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:07:56.978397Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:07:56.978406Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:07:56.978453Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (16262 chars) into prompt
+[2m2026-03-11T08:07:56.978522Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 1 open, 3 closed) into prompt
+[2m2026-03-11T08:11:08.885261Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:11:08.885343Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:11:08.885364Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:11:08.885373Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:11:08.885450Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (16472 chars) into prompt
+[2m2026-03-11T08:11:08.885558Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 0 open, 4 closed) into prompt
+[2m2026-03-11T08:16:07.918203Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:16:07.918248Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:16:07.918260Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:16:07.918264Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:16:07.918321Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (16575 chars) into prompt
+[2m2026-03-11T08:16:07.918396Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 0 open, 5 closed) into prompt
+[2m2026-03-11T08:19:24.440335Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:19:24.440391Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:19:24.440403Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:19:24.440408Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:19:24.440455Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (16575 chars) into prompt
+[2m2026-03-11T08:19:24.440549Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 0 open, 6 closed) into prompt
+[2m2026-03-11T08:19:42.040816Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:19:42.040882Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:19:42.040894Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:19:42.040899Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:19:42.040945Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (16575 chars) into prompt
+[2m2026-03-11T08:19:42.041022Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (0 ready, 0 open, 6 closed) into prompt
+[2m2026-03-11T08:22:40.228239Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:22:40.228289Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:22:40.228301Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:22:40.228306Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:22:40.228359Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (16616 chars) into prompt
+[2m2026-03-11T08:22:40.228445Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (8 ready, 8 open, 7 closed) into prompt
+[2m2026-03-11T08:24:01.442615Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:24:01.442661Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:24:01.442673Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:24:01.442678Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:24:01.442722Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (16616 chars) into prompt
+[2m2026-03-11T08:24:01.442810Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (8 ready, 8 open, 7 closed) into prompt
+[2m2026-03-11T08:24:17.992775Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:24:17.992876Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:24:17.992909Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:24:17.992918Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:24:17.993031Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (16616 chars) into prompt
+[2m2026-03-11T08:24:17.993189Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (8 ready, 8 open, 7 closed) into prompt
+[2m2026-03-11T08:30:41.857224Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:30:41.857306Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:30:41.857328Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:30:41.857337Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:30:41.857440Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (16847 chars) into prompt
+[2m2026-03-11T08:30:41.857595Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (7 ready, 7 open, 8 closed) into prompt
+[2m2026-03-11T08:31:03.448991Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:31:03.449050Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:31:03.449062Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:31:03.449066Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:31:03.449121Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (16847 chars) into prompt
+[2m2026-03-11T08:31:03.449242Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (7 ready, 7 open, 8 closed) into prompt
+[2m2026-03-11T08:35:11.675875Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:35:11.675958Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:35:11.675979Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:35:11.675988Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:35:11.676104Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (16898 chars) into prompt
+[2m2026-03-11T08:35:11.676288Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (6 ready, 6 open, 9 closed) into prompt
+[2m2026-03-11T08:37:03.039699Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:37:03.039755Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:37:03.039764Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:37:03.039768Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:37:03.039824Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (16898 chars) into prompt
+[2m2026-03-11T08:37:03.039905Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (6 ready, 6 open, 9 closed) into prompt
+[2m2026-03-11T08:37:48.180049Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:37:48.180107Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:37:48.180119Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:37:48.180124Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:37:48.180184Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (16898 chars) into prompt
+[2m2026-03-11T08:37:48.180258Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (6 ready, 6 open, 9 closed) into prompt
+[2m2026-03-11T08:39:47.173660Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:39:47.173706Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:39:47.173718Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:39:47.173723Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:39:47.173777Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (16898 chars) into prompt
+[2m2026-03-11T08:39:47.173851Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (6 ready, 6 open, 9 closed) into prompt
+[2m2026-03-11T08:40:36.966089Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:40:36.966145Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:40:36.966157Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:40:36.966161Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:40:36.966222Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (16898 chars) into prompt
+[2m2026-03-11T08:40:36.966297Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (6 ready, 6 open, 9 closed) into prompt
+[2m2026-03-11T08:44:42.519537Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:44:42.519630Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:44:42.519667Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:44:42.519674Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:44:42.519787Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (16898 chars) into prompt
+[2m2026-03-11T08:44:42.519981Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (6 ready, 6 open, 9 closed) into prompt
+[2m2026-03-11T08:49:10.218718Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:49:10.218764Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:49:10.218775Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:49:10.218780Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:49:10.218831Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (16932 chars) into prompt
+[2m2026-03-11T08:49:10.218908Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (5 ready, 5 open, 10 closed) into prompt
+[2m2026-03-11T08:51:32.354283Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:51:32.354376Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:51:32.354397Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:51:32.354406Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:51:32.354499Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (17161 chars) into prompt
+[2m2026-03-11T08:51:32.354680Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (5 ready, 5 open, 10 closed) into prompt
+[2m2026-03-11T08:52:09.222582Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:52:09.222627Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:52:09.222639Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:52:09.222644Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:52:09.222707Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (17161 chars) into prompt
+[2m2026-03-11T08:52:09.222780Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (5 ready, 5 open, 10 closed) into prompt
+[2m2026-03-11T08:52:54.515561Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:52:54.515645Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:52:54.515667Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:52:54.515676Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:52:54.515783Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (17161 chars) into prompt
+[2m2026-03-11T08:52:54.515963Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (5 ready, 5 open, 10 closed) into prompt
+[2m2026-03-11T08:54:51.345197Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:54:51.345256Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:54:51.345269Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:54:51.345273Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:54:51.345328Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (17161 chars) into prompt
+[2m2026-03-11T08:54:51.345404Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (4 ready, 4 open, 11 closed) into prompt
+[2m2026-03-11T08:56:00.275473Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:56:00.275534Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:56:00.275547Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:56:00.275552Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:56:00.275607Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (17161 chars) into prompt
+[2m2026-03-11T08:56:00.275681Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (4 ready, 4 open, 11 closed) into prompt
+[2m2026-03-11T08:56:40.373492Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:56:40.373548Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:56:40.373560Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:56:40.373565Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:56:40.373621Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (17161 chars) into prompt
+[2m2026-03-11T08:56:40.373703Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (4 ready, 4 open, 11 closed) into prompt
+[2m2026-03-11T08:57:38.150120Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:57:38.150186Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:57:38.150198Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:57:38.150206Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:57:38.150264Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (17161 chars) into prompt
+[2m2026-03-11T08:57:38.150343Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (4 ready, 4 open, 11 closed) into prompt
+[2m2026-03-11T08:57:40.318353Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:57:40.318410Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:57:40.318420Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:57:40.318423Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:57:40.318480Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (17161 chars) into prompt
+[2m2026-03-11T08:57:40.318556Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (4 ready, 4 open, 11 closed) into prompt
+[2m2026-03-11T08:57:44.887281Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:57:44.887348Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:57:44.887367Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:57:44.887374Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:57:44.887447Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (17161 chars) into prompt
+[2m2026-03-11T08:57:44.887541Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (4 ready, 4 open, 11 closed) into prompt
+[2m2026-03-11T08:59:08.785022Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory injection check: enabled=true, inject=Auto, workspace_root="/home/nnico/ethereum/pq-private-transfer"
+[2m2026-03-11T08:59:08.785071Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Looking for memories at: "/home/nnico/ethereum/pq-private-transfer/.ralph/agent/memories.md" (exists: false)
+[2m2026-03-11T08:59:08.785083Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Successfully loaded 0 memories from store
+[2m2026-03-11T08:59:08.785088Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Memory store is empty - no memories to inject
+[2m2026-03-11T08:59:08.785143Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting scratchpad (16947 chars) into prompt
+[2m2026-03-11T08:59:08.785220Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Injecting ready tasks (3 ready, 4 open, 11 closed) into prompt
+[2m2026-03-11T09:29:12.922191Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Wrapping up: max_iterations. 50 iterations in 2h 7m 10s. [3mreason[0m[2m=[0mmax_iterations [3miterations[0m[2m=[0m50 [3mduration[0m[2m=[0m2h 7m 10s
