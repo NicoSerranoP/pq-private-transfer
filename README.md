@@ -1,14 +1,12 @@
-# 🏗 Scaffold-ETH 2
+# PQ Private Transfers Protocol
+
+This is a PSE internal hackathon project. The goal is to build a private transfer protocol on Ethereum using post-quantum cryptography. The project is built using Scaffold-ETH 2, an open-source toolkit for building decentralized applications on the Ethereum blockchain. I used the [Ralph Orchestator tool](https://github.com/mikeyobrien/ralph-orchestrator) to run autonomous loops and build the code iteratively. The project is still in development and is not yet ready for production use.
 
 <h4 align="center">
-  <a href="https://docs.scaffoldeth.io">Documentation</a> |
-  <a href="https://scaffoldeth.io">Website</a>
+  <a href="https://github.com/NicoSerranoP/pq-private-transfer/blob/main/docs/Prompt.md">Initial prompt</a> |
+  <a href="https://github.com/NicoSerranoP/pq-private-transfer/tree/main/.agents/scratchpad/implementation/pq-private-transfer">Ralph generated docs</a>
 </h4>
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
-
-> [!NOTE]
-> 🤖 Scaffold-ETH 2 is AI-ready! It has everything agents need to build on Ethereum. Check `.agents/`, `.claude/`, `.opencode` or `.cursor/` for more info.
 
 ⚙️ Built using NextJS, RainbowKit, Hardhat, Wagmi, Viem, and Typescript.
 
@@ -30,7 +28,7 @@ Before you begin, you need to install the following tools:
 
 ## Quickstart
 
-To get started with Scaffold-ETH 2, follow the steps below:
+To get started, follow the steps below:
 
 1. Install dependencies if it was skipped in CLI:
 
