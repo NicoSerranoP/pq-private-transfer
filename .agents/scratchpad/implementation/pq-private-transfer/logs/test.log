@@ -1,0 +1,18 @@
+No contracts to compile
+Running Mocha tests
+
+
+  RingRegev
+    ✔ add: identity (enc_a + enc_zero = enc_a) (437ms)
+    ✔ sub: self-cancel (enc_a - enc_a = enc_zero) (343ms)
+    ✔ add: output has length 8192 bytes (325ms)
+    ✔ add: overflow wraps mod q (226ms)
+    ✔ sub: underflow wraps mod q (always positive) (88ms)
+    ✔ add/sub: invalid length reverts with InvalidCiphertextLength
+
+
+  6 passing (3s)
+
+
+6 passing (6 mocha)
+

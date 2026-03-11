@@ -1,0 +1,42 @@
+
+> @pq/crypto@0.0.1 test /home/nnico/ethereum/pq-private-transfer/packages/crypto
+> node --import tsx/esm --test src/**/*.test.ts
+
+▶ keygen
+  [32m✔ returns pk and sk of correct length [90m(27.351015ms)[39m[39m
+  [32m✔ all coefficients are in [0, q) [90m(16.372607ms)[39m[39m
+[32m✔ keygen [90m(44.514105ms)[39m[39m
+▶ encrypt / decrypt
+  [32m✔ decrypt(encrypt(m)) === m for small values [90m(239.388585ms)[39m[39m
+  [32m✔ deterministic when r is provided [90m(58.321139ms)[39m[39m
+  [32m✔ different r produces different ciphertext [90m(57.457131ms)[39m[39m
+[32m✔ encrypt / decrypt [90m(355.552201ms)[39m[39m
+▶ homomorphic add
+  [32m✔ add preserves plaintext sum [90m(87.925973ms)[39m[39m
+[32m✔ homomorphic add [90m(88.103677ms)[39m[39m
+▶ homomorphic sub
+  [32m✔ sub preserves plaintext difference [90m(83.99989ms)[39m[39m
+[32m✔ homomorphic sub [90m(84.17485ms)[39m[39m
+▶ homomorphicSum
+  [32m✔ sums multiple ciphertexts [90m(141.555975ms)[39m[39m
+[32m✔ homomorphicSum [90m(141.674133ms)[39m[39m
+▶ serialization
+  [32m✔ serializeCiphertext produces 8192 bytes [90m(40.904085ms)[39m[39m
+  [32m✔ serializePublicKey produces 8192 bytes [90m(14.643144ms)[39m[39m
+  [32m✔ deserializeCiphertext roundtrips correctly [90m(54.505097ms)[39m[39m
+[32m✔ serialization [90m(110.251371ms)[39m[39m
+▶ types
+  [32m✔ Polynomial is an array of bigints with length 1024 [90m(0.656503ms)[39m[39m
+  [32m✔ Ciphertext has a and b polynomials [90m(0.127607ms)[39m[39m
+  [32m✔ PublicKey has a and b polynomials [90m(0.15995ms)[39m[39m
+  [32m✔ SecretKey is a Polynomial [90m(0.116846ms)[39m[39m
+  [32m✔ ZKProof has commitment and inputs fields [90m(0.142196ms)[39m[39m
+[32m✔ types [90m(2.379945ms)[39m[39m
+[34mℹ tests 16[39m
+[34mℹ suites 7[39m
+[34mℹ pass 16[39m
+[34mℹ fail 0[39m
+[34mℹ cancelled 0[39m
+[34mℹ skipped 0[39m
+[34mℹ todo 0[39m
+[34mℹ duration_ms 1025.028367[39m

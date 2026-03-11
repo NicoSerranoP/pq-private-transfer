@@ -31,8 +31,11 @@ export default defineConfig({
   networks: {
     // View the networks that are pre-configured.
     // If the network you are looking for is not here you can add new network settings
-    hardhat: {
+    // Hardhat 3: default EDR network is "default", not "hardhat"
+    // Use prague hardfork to avoid EIP-7825 (Osaka) 16MB per-tx gas cap
+    default: {
       type: "edr-simulated",
+      hardfork: "prague",
       forking: {
         url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
         enabled: process.env.MAINNET_FORKING_ENABLED === "true",

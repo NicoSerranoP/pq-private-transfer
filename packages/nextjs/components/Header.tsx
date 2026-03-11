@@ -22,6 +22,18 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "/",
   },
   {
+    label: "Register",
+    href: "/register",
+  },
+  {
+    label: "Transfer",
+    href: "/transfer",
+  },
+  {
+    label: "Withdraw",
+    href: "/withdraw",
+  },
+  {
     label: "ERC-20",
     href: "/erc20",
     icon: <BanknotesIcon className="h-4 w-4" />,

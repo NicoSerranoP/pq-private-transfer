@@ -1,47 +1,26 @@
-# Design — PQ Private Transfer Protocol
+# PQ Private Transfer — Design Document
 
 ## 1. Overview
 
-**Problem:** Ethereum transfers are fully transparent. The sender, recipient, and amount are all public. This exposes users to front-running, financial surveillance, and targeted attacks.
+**Problem:** Standard Ethereum transfers reveal sender, recipient, and amount. Even privacy coins like Zcash rely on elliptic curve cryptography broken by Shor's algorithm.
 
-**Solution:** A post-quantum anonymous transfer protocol using:
-- **Ring Regev (RLWE) homomorphic encryption** — balances stored as ciphertexts; the contract operates on them without decrypting
-- **Client-side STARK proofs** — users prove transfer validity without revealing their balance or amounts
-- **ORAM-inspired dummy recipients** — each transfer includes N=4 recipients (1 real + 3 dummies), making the real recipient indistinguishable on-chain
-
-Both primitives are post-quantum secure. Ring Regev hardness relies on RLWE; STARKs use only collision-resistant hash functions.
+**Solution:** A post-quantum anonymous transfer protocol where:
+- Balances are stored as Ring Regev (RLWE) ciphertexts — quantum-secure additive HE
+- Transfers update N=4 recipient balances atomically; an observer cannot tell which recipient is real
+- Client-side STARK proofs (mock for prototype) enforce correctness without revealing plaintext values
+- The contract performs only homomorphic add/sub — it never sees plaintext amounts
 
 ---
 
 ## 2. Detailed Requirements
 
-### R1 — Denomination
-- Protocol unit: **szabo (1 szabo = 10¹² wei = 1 microETH)**
-- Plaintext space: `Z_q`, `q = 2²⁷ = 134,217,728` → max balance ≈ 134 ETH
-- Deposits must be multiples of 1 szabo
-- `PROTOCOL_UNIT = 1e12` in both Solidity and TypeScript
+See `requirements.md` for the full list. Key decisions from Q&A:
 
-### R2 — STARK Strategy
-- Phase 2–4 use **stub proofs** (verifier always returns true in dev)
-- `STARKVerifier` is an isolated, swappable interface
-- Phase 1 researches Stwo (WASM), Risc0 zkVM (WASM), Winterfell (WASM)
-- Non-PQ provers (Groth16) are excluded
-
-### R3 — Noise Management
-- `Account` struct has `uint32 noiseCount`; incremented each HomAdd, reset on `refresh()`
-- `MAX_DUMMY_USES = 5000` hard safety guard; `transfer()` reverts if exceeded
-- `refresh()` function: re-encrypts balance with fresh noise, proved by RefreshCircuit
-
-### R4 — Key Derivation
-- `keygen(seed: Uint8Array)` — deterministic from `keccak256(sign("pq-private-transfer-v1"))`
-- sk stored in `localStorage`; UI shows prototype-limitation banner
-- Not PQ-secure in production (ECDSA wallet is quantum-vulnerable)
-
-### R5 — General
-- N = 4 recipients per transfer (1 real + 3 dummies)
-- 72 KB ciphertext calldata per transfer (acceptable on L2)
-- STARK proving runs in a Web Worker (UI remains responsive)
-- All 4 contract functions (register, transfer, withdraw, refresh) with 100% test coverage
+| # | Decision | Rationale |
+|---|---|---|
+| R2 | Mock STARK prover | Real RLWE STARK circuits = millions of constraints, minutes in WASM. No JS library has RLWE gadgets. |
+| R3 | Block transfer when pool < 5 | Sender-as-dummy or duplicate dummies both leak information; honest failure is better |
+| R4 | `deposit()` top-up in scope | Without top-up, users who spend down balance are stuck; Deposit Circuit already covers this |
 
 ---
 
@@ -49,179 +28,189 @@ Both primitives are post-quantum secure. Ring Regev hardness relies on RLWE; STA
 
 ```mermaid
 graph TB
-    subgraph Client ["Browser (Client)"]
-        UI["NextJS UI\n(register / transfer / withdraw / refresh)"]
-        WW["Web Worker\n(STARK Prover)"]
-        KS["localStorage\n(sk)"]
-        CRYPTO["packages/crypto\n(ringRegev.ts, stark/*.ts)"]
+    subgraph Browser
+        UI[NextJS Frontend]
+        WW[Web Worker\nSTARK Prover Mock]
+        LS[(localStorage\nprivate key)]
+        UI -- generate proof --> WW
+        UI -- read/write key --> LS
     end
 
-    subgraph Chain ["Ethereum L2 (Hardhat local / Base / Optimism)"]
-        PT["PrivateTransfer.sol\n(register, transfer, withdraw, refresh)"]
-        RRL["RingRegevLib.sol\n(add, sub)"]
-        SV["STARKVerifier.sol\n(stub → real)"]
-        STORE["mapping(address → Account)\n{encBalance, pk, noiseCount}"]
+    subgraph packages/crypto
+        RR[ringRegev.ts\nkeygen/encrypt/decrypt/add/sub]
+        SC[stark/\ndepositCircuit\ntransferCircuit\nwithdrawCircuit]
+        TY[types.ts]
     end
 
-    UI -->|"sign('pq-private-transfer-v1')"| WALLET["MetaMask"]
-    WALLET -->|"signature"| UI
-    UI --> CRYPTO
-    UI --> WW
-    WW --> CRYPTO
-    CRYPTO -->|"HE ciphertexts + STARK proof"| UI
-    UI -->|"calldata: pk, ciphertexts, proof"| PT
-    PT --> RRL
-    PT --> SV
-    PT --> STORE
-    STORE -->|"encryptedBalance"| UI
-    UI -->|"Decrypt client-side"| CRYPTO
+    subgraph Hardhat
+        PT[PrivateTransfer.sol]
+        RRL[RingRegev.sol library]
+        DV[DepositVerifier.sol]
+        TV[TransferVerifier.sol]
+        WV[WithdrawVerifier.sol]
+    end
+
+    UI -- useScaffoldWriteContract --> PT
+    WW -- imports --> SC
+    SC -- imports --> RR
+    PT -- library --> RRL
+    PT -- verifyDeposit --> DV
+    PT -- verifyTransfer --> TV
+    PT -- verifyWithdraw --> WV
 ```
 
 ---
 
 ## 4. Components and Interfaces
 
-### 4.1 `packages/crypto/`
+### 4.1 `packages/crypto/types.ts`
 
-**`types.ts`**
+Core type definitions shared across all packages:
+
 ```typescript
-type Polynomial = Int32Array;           // n=1024 coefficients mod q
-type Ciphertext  = [Polynomial, Polynomial]; // (a, b)
-type PublicKey   = [Polynomial, Polynomial]; // (a, b = a·sk + e)
-type SecretKey   = Polynomial;
-type ZKProof     = Uint8Array;           // opaque bytes (stub: empty)
+type Polynomial = bigint[]               // length n=1024, coefficients in Z_q
+type Ciphertext = { a: Polynomial; b: Polynomial }
+type PublicKey  = { a: Polynomial; b: Polynomial }
+type SecretKey  = Polynomial
+type ZKProof    = { commitment: string; inputs: string[] }  // mock
 ```
 
-**`ringRegev.ts`**
+### 4.2 `packages/crypto/ringRegev.ts`
 
-| Export | Signature | Description |
-|--------|-----------|-------------|
-| `keygen` | `(seed: Uint8Array) → {pk, sk}` | Deterministic key generation |
-| `encrypt` | `(m: number, pk, r: Polynomial) → Ciphertext` | Encrypt plaintext in protocol units |
-| `decrypt` | `(c: Ciphertext, sk) → number` | Decrypt to protocol units |
-| `add` | `(c1: Ciphertext, c2: Ciphertext) → Ciphertext` | Homomorphic add |
-| `sub` | `(c1: Ciphertext, c2: Ciphertext) → Ciphertext` | Homomorphic sub |
-| `encodeAmount` | `(wei: bigint) → number` | `wei / PROTOCOL_UNIT` |
-| `decodeAmount` | `(units: number) → bigint` | `units * PROTOCOL_UNIT` |
+| Export | Signature | Notes |
+|---|---|---|
+| `keygen` | `() => { pk: PublicKey; sk: SecretKey }` | Random `s, e, a`; `b = a·s + e` |
+| `encrypt` | `(m: bigint, pk: PublicKey, r?: Polynomial) => Ciphertext` | `r` = randomness; deterministic if provided |
+| `decrypt` | `(ct: Ciphertext, sk: SecretKey) => bigint` | Noise must be < q/2 |
+| `add` | `(a: Ciphertext, b: Ciphertext) => Ciphertext` | Coefficient-wise addition mod q |
+| `sub` | `(a: Ciphertext, b: Ciphertext) => Ciphertext` | Coefficient-wise subtraction mod q |
+| `homomorphicSum` | `(cts: Ciphertext[]) => Ciphertext` | Fold of `add` |
+| `serializePublicKey` | `(pk: PublicKey) => Uint8Array` | For on-chain calldata |
+| `serializeCiphertext` | `(ct: Ciphertext) => Uint8Array` | For on-chain calldata |
+| `deserializeCiphertext` | `(b: Uint8Array) => Ciphertext` | For client decryption |
 
-All polynomial arithmetic mod `q = 2²⁷` using NTT multiplication.
+**Polynomial multiplication:** Schoolbook O(n²) multiplication mod `x^1024 + 1`. NTT is infeasible with `q=2²⁷` because standard NTT requires a prime `q ≡ 1 (mod 2n)` — `q=2²⁷` is a power of two and does not satisfy this. Schoolbook is sufficient for the prototype (multiply is only used in `keygen` and `encrypt`, not in HE.add/sub).
 
-**`stark/depositCircuit.ts`**
+### 4.3 `packages/crypto/stark/` (Mock Prover)
+
+All three circuits expose the same interface:
+
 ```typescript
-export function proveDeposit(inputs: DepositPrivate, pub: DepositPublic): ZKProof
-export function verifyDeposit(pub: DepositPublic, proof: ZKProof): boolean
-```
-
-**`stark/transferCircuit.ts`**
-```typescript
-export function proveTransfer(inputs: TransferPrivate, pub: TransferPublic): ZKProof
-export function verifyTransfer(pub: TransferPublic, proof: ZKProof): boolean
-```
-
-**`stark/withdrawCircuit.ts`**
-```typescript
-export function proveWithdraw(inputs: WithdrawPrivate, pub: WithdrawPublic): ZKProof
-export function verifyWithdraw(pub: WithdrawPublic, proof: ZKProof): boolean
-```
-
-**`stark/refreshCircuit.ts`**
-```typescript
-export function proveRefresh(inputs: RefreshPrivate, pub: RefreshPublic): ZKProof
-export function verifyRefresh(pub: RefreshPublic, proof: ZKProof): boolean
-```
-
-All stub implementations return `new Uint8Array(0)` for the proof and `true` for verify. The interface is designed so the real prover is a drop-in replacement.
-
----
-
-### 4.2 Smart Contracts (`packages/hardhat/contracts/`)
-
-**`PrivateTransfer.sol`** — Main contract
-
-```
-register(pk, initialBalance, depositProof)  → payable
-transfer(recipients[4], encUpdReceiver[4], encUpdSender[4], encTotal, proof)
-withdraw(amount, encAmount, encNewBalance, proof)
-refresh(encNewBalance, proof)
-```
-
-Data structures:
-```solidity
-uint256 constant PROTOCOL_UNIT = 1e12;
-uint32  constant MAX_DUMMY_USES = 5000;
-
-struct Account {
-    bytes   encryptedBalance;  // ~8 KB RingRegev ciphertext
-    bytes   publicKey;         // ~8 KB RingRegev public key
-    uint32  noiseCount;
+interface CircuitInputs {
+  publicInputs: Record<string, unknown>
+  privateInputs: Record<string, unknown>
 }
 
+async function prove(inputs: CircuitInputs): Promise<ZKProof>
+async function verify(publicInputs: Record<string, unknown>, proof: ZKProof): Promise<boolean>
+```
+
+**Mock implementation:**
+- `prove`: SHA-256 hash over serialized public + private inputs → `{ commitment: hash, inputs: serialized_public_inputs }`
+- `verify`: checks proof format (commitment non-zero, inputs non-empty) — does NOT verify the hash. Clearly documented with `// MOCK — not real ZK` comments.
+
+**Deposit circuit** (`depositCircuit.ts`):
+```
+publicInputs:  { pk, encAmount, depositAmount }
+privateInputs: { r }
+```
+
+**Transfer circuit** (`transferCircuit.ts`):
+```
+publicInputs:  { pkB, recipientPks[4], encBalanceB, encBalanceToUpdateReceiver[4], encBalanceToUpdateSender[4], encTotal }
+privateInputs: { skB, plaintextBalance, amounts[4], total, rReceiver[4], rSender[4], rTotal }
+```
+
+**Withdraw circuit** (`withdrawCircuit.ts`):
+```
+publicInputs:  { pkB, encBalance, encAmount, encNewBalance, amount }
+privateInputs: { skB, plaintextBalance, rAmount, rNewBalance }
+```
+
+### 4.4 `packages/hardhat/contracts/PrivateTransfer.sol`
+
+**State:**
+```solidity
+struct Account {
+    bytes encryptedBalance; // ~8KB RingRegev ciphertext
+    bytes publicKey;        // ~8KB RLWE public key
+}
 mapping(address => Account) public accounts;
+mapping(bytes32 => bool) public usedTransfers; // keccak256(encTotal) nullifier — prevents double-spend
+uint256 public totalRegistered;
 uint256 public totalDeposits;
 ```
 
-Events:
-```solidity
-event Registered(address indexed user, uint256 depositAmount);
-event Transferred(address indexed sender, address[4] recipients);
-event Withdrawn(address indexed user, uint256 amount);
-event Refreshed(address indexed user);
-```
+**Functions:**
 
-**`RingRegevLib.sol`** — Pure Solidity library for ciphertext arithmetic
+| Function | Access | Modifiers |
+|---|---|---|
+| `register(bytes pk, bytes initialBalance, bytes depositProof)` | external payable | — |
+| `deposit(bytes encAmount, bytes depositProof)` | external payable | mustBeRegistered |
+| `transfer(address[4] recipients, bytes[4] encBalanceToUpdateReceiver, bytes[4] encBalanceToUpdateSender, bytes encTotal, bytes proof)` | external | — |
+| `withdraw(uint256 amount, bytes encAmount, bytes encNewBalance, bytes proof)` | external | nonReentrant |
 
-| Function | Signature | Description |
-|----------|-----------|-------------|
-| `add` | `(bytes a, bytes b) → bytes` | Coefficient-wise addition mod q |
-| `sub` | `(bytes a, bytes b) → bytes` | Coefficient-wise subtraction mod q |
+**`transfer` validation and balance update order (CEI):**
+1. Sender registered
+2. `totalRegistered >= 5` — else revert `InsufficientPool(totalRegistered, 5)`
+3. All 4 recipients registered, distinct, ≠ sender
+4. `nullifier = keccak256(encTotal)` not in `usedTransfers` — else revert `TransferAlreadyUsed()`
+5. `TransferVerifier.verify(pub, proof)` passes
+6. Update sender balance: `accounts[sender].encryptedBalance = RingRegev.sub(senderBalance, encTotal)`
+7. Update each recipient: `accounts[recipients[i]].encryptedBalance = RingRegev.add(recipientBalance, encBalanceToUpdateReceiver[i])` for i in 0..3
+8. Mark nullifier: `usedTransfers[nullifier] = true`
 
-Ciphertext format: 2 × 1024 × 4 bytes = 8192 bytes as `bytes` ABI type.
+Steps 6–8 are all effects; they happen after all checks (steps 1–5) and before any external interaction. `transfer()` has no ETH transfer so no `nonReentrant` guard is needed, but all state updates complete atomically before the function returns.
 
-**`STARKVerifier.sol`** — Stub verifier interface
+**`register` CEI pattern:**
+1. Check: `pk` non-empty, `accounts[msg.sender].pk` is zero (else `AlreadyRegistered()`), `DepositVerifier.verify(pub, depositProof)` passes
+2. Effect: store `accounts[msg.sender] = { publicKey: pk, encryptedBalance: initialBalance }`, increment `totalRegistered`, `totalDeposits += msg.value`
+3. Emit: `Registered(msg.sender, msg.value)`
 
-```solidity
-interface ISTARKVerifier {
-    function verifyDeposit(bytes calldata pub, bytes calldata proof) external view returns (bool);
-    function verifyTransfer(bytes calldata pub, bytes calldata proof) external view returns (bool);
-    function verifyWithdraw(bytes calldata pub, bytes calldata proof) external view returns (bool);
-    function verifyRefresh(bytes calldata pub, bytes calldata proof) external view returns (bool);
-}
+**`deposit` CEI pattern:**
+1. Check: registered (else `NotRegistered()`), `DepositVerifier.verify(pub, depositProof)` passes (pk read from `accounts[msg.sender].publicKey`)
+2. Effect: `accounts[msg.sender].encryptedBalance = RingRegev.add(existingBalance, encAmount)`, `totalDeposits += msg.value`
+3. Emit: `Deposited(msg.sender, msg.value)`
 
-contract StubSTARKVerifier is ISTARKVerifier {
-    // All functions return true — swap for real verifier in production
-}
-```
+**`withdraw` CEI pattern:**
+1. Check: registered, `amount > 0`, `address(this).balance >= amount` (else `InsufficientContractBalance()`), proof valid
+2. Effect: update `encryptedBalance = encNewBalance`, `totalDeposits -= amount`
+3. Interact: `msg.sender.call{value: amount}("")`
 
----
+**`deposit` public key resolution:**
+`deposit(bytes encAmount, bytes depositProof)` reads `accounts[msg.sender].publicKey` from storage to build the verifier public inputs. The caller does not pass `pk` — it is always the stored key for the calling account.
 
-### 4.3 Frontend (`packages/nextjs/`)
+### 4.5 `packages/hardhat/contracts/RingRegev.sol`
 
-**Pages:**
-- `app/register/page.tsx` — Enter ETH amount, derive keypair, encrypt, prove deposit, submit tx
-- `app/transfer/page.tsx` — Enter recipient + amount, auto-select 3 dummies, prove transfer, submit tx
-- `app/withdraw/page.tsx` — Enter amount, prove withdrawal, submit tx
-- `app/refresh/page.tsx` — One-click noise refresh
+Solidity library:
+- `add(bytes memory a, bytes memory b) internal pure returns (bytes memory)` — coefficient-wise add mod q; decodes raw 4-byte LE bytes via manual loop (not `abi.decode` — ABI pads each `uint32` to 32 bytes, producing 32768 bytes, not 4096)
+- `sub(bytes memory a, bytes memory b) internal pure returns (bytes memory)` — coefficient-wise sub mod q
+
+**Serialization contract:**
+A `Polynomial` (`bigint[1024]`) is serialized as `4096 bytes` (little-endian, 4 bytes per coefficient, coefficients in `[0, 2²⁷)`). A `Ciphertext` (`{ a, b }`) is serialized as `8192 bytes` = `a || b`. A `PublicKey` is serialized identically to `Ciphertext` (same structure). All on-chain `bytes` fields follow this layout.
+
+TypeScript helpers in `packages/crypto/src/ringRegev.ts`:
+- `serializePolynomial(p: Polynomial): Uint8Array` — write each `bigint` as 4-byte LE
+- `deserializePolynomial(b: Uint8Array): Polynomial` — read 4-byte LE chunks
+
+No ABI encoding overhead — raw byte packing avoids 32-byte slot padding for large arrays.
+
+### 4.6 STARK Verifier Contracts
+
+Three separate contracts, one per circuit. Each `verify()` function deserializes the proof bytes, checks commitment is non-zero and inputs field is non-empty. Does not cryptographically verify — matches the mock prover.
+
+### 4.7 Frontend Pages
+
+**`/register`:** generate keypair → store sk in localStorage → encrypt msg.value → prove (Web Worker) → `register(pk, initialBalance, proof)`; "Top-up" button calls `deposit()`.
+
+**`/transfer`:** fetch registered users from events → check pool ≥ 5 → select 3 dummies → build amounts[4] → prove (Web Worker) → `transfer(...)`.
+
+**`/withdraw`:** decrypt balance (show client-side) → encrypt withdrawal amount and new balance → prove (Web Worker) → `withdraw(amount, encAmount, encNewBalance, proof)`.
 
 **Components:**
-- `components/BalanceDisplay.tsx` — Reads encryptedBalance from chain, decrypts client-side, shows in ETH
-- `components/ProofStatus.tsx` — Shows STARK prover progress (spinner + "Generating proof…")
-- `components/DummyPoolStatus.tsx` — Shows count of registered accounts available as dummies
-- `components/PQLimitationBanner.tsx` — Static warning about deterministic key security
-
-**Key management (`lib/keyManager.ts`):**
-```typescript
-export async function deriveKey(walletClient): Promise<{pk, sk}>
-// 1. Sign "pq-private-transfer-v1" with MetaMask
-// 2. seed = keccak256(signature)
-// 3. {pk, sk} = ringRegev.keygen(hexToBytes(seed))
-// 4. sk stored in localStorage["pq-transfer-sk"]
-// 5. pk returned for on-chain registration
-```
-
-**Web Worker (`workers/prover.worker.ts`):**
-- Receives prove request message
-- Calls appropriate circuit prover
-- Posts `{proof, status}` back to main thread
+- `BalanceDisplay` — reads `accounts[address].encryptedBalance` via `useScaffoldReadContract`, decrypts with sk from localStorage
+- `ProofStatus` — spinner while Web Worker runs
+- `DummyPoolStatus` — shows registered count, warns when < 5
 
 ---
 
@@ -232,171 +221,201 @@ classDiagram
     class Account {
         +bytes encryptedBalance
         +bytes publicKey
-        +uint32 noiseCount
     }
-
-    class Transfer {
-        +address[4] recipients
-        +bytes[4] encBalanceToUpdateReceiver
-        +bytes[4] encBalanceToUpdateSender
-        +bytes encTotal
-        +bytes proof
+    class PrivateTransfer {
+        +mapping accounts
+        +uint256 totalRegistered
+        +uint256 totalDeposits
+        +register()
+        +deposit()
+        +transfer()
+        +withdraw()
     }
-
-    class Ciphertext {
-        +Int32Array a
-        +Int32Array b
+    class RingRegev {
+        <<library>>
+        +add(a, b) bytes
+        +sub(a, b) bytes
     }
-
-    class PublicKey {
-        +Int32Array a
-        +Int32Array b
+    class DepositVerifier {
+        +verify() bool
     }
-
-    class SecretKey {
-        +Int32Array s
+    class TransferVerifier {
+        +verify() bool
     }
-
-    Account --> Ciphertext : encryptedBalance
-    Account --> PublicKey : publicKey
-    Transfer --> Ciphertext : ciphertexts
-    PublicKey --> SecretKey : keygen
+    class WithdrawVerifier {
+        +verify() bool
+    }
+    PrivateTransfer --> Account : stores
+    PrivateTransfer --> RingRegev : uses
+    PrivateTransfer --> DepositVerifier : calls
+    PrivateTransfer --> TransferVerifier : calls
+    PrivateTransfer --> WithdrawVerifier : calls
 ```
 
-### Calldata Layout (Transfer)
+---
 
-| Field | Size | Notes |
-|-------|------|-------|
-| `recipients[4]` | 128 B | 4 × 20-byte addresses |
-| `encBalanceToUpdateReceiver[4]` | 32 KB | 4 × 8 KB ciphertexts |
-| `encBalanceToUpdateSender[4]` | 32 KB | 4 × 8 KB ciphertexts |
-| `encTotal` | 8 KB | 1 × 8 KB ciphertext |
-| `proof` | ~0 B (stub) | Stub: empty bytes |
-| **Total** | **~72 KB** | Acceptable on L2 |
+## 6. End-to-End Sequence (Transfer)
+
+```mermaid
+sequenceDiagram
+    participant U as User (Browser)
+    participant WW as Web Worker
+    participant C as PrivateTransfer.sol
+
+    U->>U: Fetch registered users (Registered events)
+    U->>U: Select real recipient + 3 random dummies
+    U->>U: Build amounts[4], encrypt each under recipient pk
+    U->>WW: transferCircuit.prove(publicInputs, privateInputs)
+    WW-->>U: ZKProof (mock)
+    U->>C: transfer(recipients, encBalanceToUpdateReceiver, encBalanceToUpdateSender, encTotal, proof)
+    C->>C: Validate recipients (registered, distinct, not sender)
+    C->>C: TransferVerifier.verify(pub, proof)
+    C->>C: accounts[sender].balance = RingRegev.sub(balance, encTotal)
+    loop for each recipient i
+        C->>C: accounts[recipients[i]].balance = RingRegev.add(balance, encBalanceToUpdateReceiver[i])
+    end
+    C-->>U: emit Transferred(sender, recipients)
+```
 
 ---
 
-## 6. Error Handling
+## 7. Error Handling
 
-### Contract Reverts
-
-| Condition | Revert message |
-|-----------|---------------|
-| Already registered | `"already registered"` |
-| Deposit not multiple of PROTOCOL_UNIT | `"amount not divisible by protocol unit"` |
-| Deposit amount = 0 | `"must deposit ETH"` |
-| Invalid STARK proof | `"invalid proof"` |
-| Recipient not registered | `"recipient not registered"` |
-| noiseCount >= MAX_DUMMY_USES | `"account needs refresh"` |
-| ETH transfer failed | `"ETH transfer failed"` |
-| N != 4 in transfer | `"recipients must be N=4"` |
-| Array length mismatch | `"length mismatch"` |
-
-### Client-side Failures
-
-| Failure | Handling |
-|---------|----------|
-| MetaMask sign rejected | Show error, allow retry |
-| Web Worker prover error | Show error with details; never silently swallow |
-| localStorage unavailable | Show error: "private key storage unavailable" |
-| Decrypt produces out-of-range value | Show "balance corrupted — refresh needed" |
-| noiseCount approaching MAX_DUMMY_USES | Show warning banner before transfer |
-
-### Reentrancy
-
-- `withdraw()` uses checks-effects-interactions pattern: update `encryptedBalance` before `call{value}()`
-- No additional reentrancy guard needed for the other functions (no ETH transfer)
+| Error | Type | Trigger |
+|---|---|---|
+| `AlreadyRegistered()` | custom | `register()` called by registered address |
+| `NotRegistered()` | custom | `deposit()`/`withdraw()` by unregistered address |
+| `InsufficientPool(uint256 have, uint256 need)` | custom | `transfer()` when `totalRegistered < 5` |
+| `InvalidProof()` | custom | Verifier returns false |
+| `InvalidRecipients()` | custom | Duplicate/unregistered recipients or self as recipient |
+| `ZeroAmount()` | custom | `withdraw()` with `amount == 0` |
+| `InsufficientContractBalance()` | custom | `address(this).balance < amount` in `withdraw()` |
+| `ETHTransferFailed()` | custom | Low-level call fails in `withdraw()` |
+| `TransferAlreadyUsed()` | custom | `keccak256(encTotal)` already in `usedTransfers` |
 
 ---
 
-## 7. Testing Strategy
+## 8. Testing Strategy
 
-### Unit Tests (`packages/hardhat/test/`)
+### Unit Tests (Hardhat)
 
-**Ring Regev library:**
-- Encrypt/decrypt roundtrip for random plaintexts in `[0, q)`
-- Homomorphic add: `Decrypt(Add(Enc(a), Enc(b))) == a + b`
-- Homomorphic sub: `Decrypt(Sub(Enc(a), Enc(b))) == a - b`
-- Noise accumulation: k HomAdds still decrypts correctly for k < MAX_DUMMY_USES
+| Target | Tests |
+|---|---|
+| `RingRegev.sol` | add/sub roundtrip, overflow/underflow mod q |
+| `DepositVerifier.sol` | accepts valid proof, rejects malformed proof |
+| `TransferVerifier.sol` | accepts valid proof, rejects malformed proof |
+| `WithdrawVerifier.sol` | accepts valid proof, rejects malformed proof |
+| `PrivateTransfer.register()` | stores account, increments totalRegistered, rejects re-registration |
+| `PrivateTransfer.deposit()` | adds to balance via HE.add, rejects unregistered |
+| `PrivateTransfer.transfer()` | updates all 4 balances, rejects bad pool, rejects duplicates, rejects self |
+| `PrivateTransfer.withdraw()` | pays ETH, updates balance, reentrancy guard |
 
-**`PrivateTransfer.sol`:**
-- `register()` stores account, emits event, updates totalDeposits
-- `register()` reverts if already registered
-- `register()` reverts if amount not divisible by PROTOCOL_UNIT
-- `transfer()` updates all 4 balances, decrements sender balance, emits event
-- `transfer()` reverts for unregistered recipient
-- `transfer()` reverts if noiseCount >= MAX_DUMMY_USES
-- `withdraw()` pays ETH, updates balance, emits event
-- `withdraw()` reverts for insufficient balance (proof-level check)
-- `refresh()` resets noiseCount, updates encryptedBalance
+### TypeScript Unit Tests (packages/crypto)
 
-### Integration Tests (7 required + 1)
+| Target | Tests |
+|---|---|
+| `ringRegev.ts` | encrypt/decrypt roundtrip, HE.add preserves sum, HE.sub preserves diff |
+| `depositCircuit.ts` | prove/verify roundtrip |
+| `transferCircuit.ts` | prove/verify roundtrip |
+| `withdrawCircuit.ts` | prove/verify roundtrip |
 
-1. **Happy path** — register, transfer, recipient withdraws; plaintext balances match
-2. **Dummy recipients** — dummy balances update, real recipient gets non-zero, all ciphertexts differ
-3. **Overdraft attempt** — proof generation fails before tx; or tx reverts
-4. **Invalid proof** — tampered proof bytes; contract rejects
-5. **Double spend** — same balance used twice; second tx fails
-6. **Withdrawal underflow** — withdraw > balance; proof fails
-7. **Unregistered recipient** — transfer to unregistered address; reverts
-8. **Refresh** — after >5000 dummy selections, refresh resets noiseCount; transfer succeeds again
+### Integration Test Scenarios
 
-### E2E (Manual)
-- Full register → transfer → withdraw flow on local Hardhat network
-- STARK prover runs in Web Worker (UI responsive during proof generation)
-- Balance display decrypts correctly after each operation
+1. **Happy path** — register → transfer (real recipient receives, dummies get 0) → withdraw
+2. **Dummy balance** — dummy addresses' decrypted balances unchanged after transfer
+3. **Overdraft** *(mock-prover limitation — client-side only)* — transfer amount > balance: proof construction fails in the TypeScript client because private inputs violate circuit constraint 2. A malicious actor bypassing the client can submit a forged proof; the mock verifier cannot detect this. Real enforcement requires production ZK circuits.
+4. **Invalid proof** — tampered proof bytes: `InvalidProof()` revert
+5. **Double spend** — same encTotal submitted twice: second tx fails
+6. **Withdrawal underflow** *(mock-prover limitation — client-side only)* — withdraw more than balance: proof construction fails in the TypeScript client because private inputs violate circuit constraint 2. Same mock-prover caveat as scenario 3.
+7. **Unregistered recipient** — `InvalidRecipients()` revert
 
 ---
 
-## 8. Appendices
+## 8a. Mock-Prover Limitations
+
+The prototype mock prover accepts any well-formed proof (non-zero commitment, non-empty inputs). The following properties are **NOT enforced** by the on-chain contract and are only enforced by the honest TypeScript client:
+
+| Property | Who enforces it | What a malicious actor can bypass |
+|---|---|---|
+| Sender balance ≥ transfer total | Client (circuit constraint 2) | Overdraft: send more than balance |
+| Withdrawal amount ≤ balance | Client (circuit constraint 2) | Underflow: withdraw more than balance |
+| Amounts sum to total | Client (circuit constraint 3) | Send inconsistent amounts |
+| Ciphertexts correctly encrypted | Client (circuit constraints 5–7) | Send arbitrary ciphertexts |
+
+**These limitations are known and expected for the prototype.** Production deployment requires replacing the mock with real STARK circuits that cryptographically enforce all constraints. The double-spend prevention (`usedTransfers` nullifier) IS enforced on-chain independently of the proof.
+
+---
+
+```
+packages/
+  crypto/
+    src/
+      ringRegev.ts
+      stark/
+        depositCircuit.ts
+        transferCircuit.ts
+        withdrawCircuit.ts
+      types.ts
+    package.json
+    tsconfig.json
+
+  hardhat/
+    contracts/
+      PrivateTransfer.sol
+      RingRegev.sol
+      verifiers/
+        DepositVerifier.sol
+        TransferVerifier.sol
+        WithdrawVerifier.sol
+    deploy/
+      01_deploy_ring_regev.ts
+      02_deploy_verifiers.ts
+      03_deploy_private_transfer.ts
+    test/
+      PrivateTransfer.test.ts
+      RingRegev.test.ts
+
+  nextjs/
+    app/
+      register/page.tsx
+      transfer/page.tsx
+      withdraw/page.tsx
+    components/
+      BalanceDisplay.tsx
+      ProofStatus.tsx
+      DummyPoolStatus.tsx
+    workers/
+      starkProver.worker.ts
+```
+
+---
+
+## 10. Appendices
 
 ### A. Technology Choices
 
-| Decision | Choice | Rationale |
-|----------|--------|-----------|
-| HE scheme | Ring Regev (RLWE) | PQ-secure additive HE; n=1024 gives 128-bit security; q=2²⁷ fits szabo denomination |
-| ZK proof system | STARK (stub → Stwo/Risc0/Winterfell) | PQ-secure (hash-based), no trusted setup, logarithmic verification |
-| L2 network | Base or Optimism | 72 KB calldata is ~$0.01–$0.10 on L2 vs. $100+ on L1 |
-| Smart contract framework | Hardhat | SE-2 default; good test infrastructure |
-| Frontend framework | Next.js (SE-2) | Pre-configured with RainbowKit/Wagmi/Viem |
-| Key derivation | Deterministic from wallet sig | Recoverable without backup; acceptable for prototype |
-| Denomination | szabo (10¹² wei) | Max 134 ETH; practical for prototype; fits in q |
-| Noise guard | noiseCount + MAX_DUMMY_USES=5000 + refresh() | Prevents silent decryption failure; no epoch reveals usage patterns |
+| Component | Choice | Reason |
+|---|---|---|
+| HE | Ring Regev (RLWE), custom TypeScript | Only PQ-secure additive HE feasible in browser; no suitable JS lib exists |
+| STARK Prover | Mock (SHA-256 commitment) | Real RLWE STARK = millions of constraints, no JS WASM lib has RLWE gadgets |
+| Polynomial multiplication | Schoolbook O(n²) | NTT requires prime q ≡ 1 (mod 2n); q=2²⁷ is not prime. Schoolbook is sufficient — multiply only used in keygen/encrypt, not HE.add/sub |
+| Solidity HE | Coefficient-wise add/sub only | HE.add/sub on ciphertexts is polynomial addition — no NTT needed on-chain |
+| L2 | Optimism or Base (confirmed by Phase 1 research) | 72KB calldata costs ~$0.5 on L2 vs ~$50 on mainnet |
 
-### B. Alternative Approaches Considered
+### B. Alternatives Considered
 
-**Denomination alternatives:**
-- gwei: max 0.134 ETH — too small
-- finney: max 134,000 ETH — wastes q precision with no benefit
-
-**Noise management alternatives:**
-- Epoch-based bounding: leaks dummy usage on-chain; doesn't fix existing noise → rejected
-- Automatic server-side refresh: requires trusted server → rejected (breaks client-side model)
-
-**Key derivation alternatives:**
-- Random key + localStorage: funds permanently lost on browser clear → poor DX for prototype
-- Random key + password-encrypted backup: correct for production; too much UX work for prototype
-
-**STARK prover alternatives:**
-- Groth16 / Plonky2: not PQ-secure (elliptic curves) → explicitly rejected
-- Blocking on real prover: freezes all other phases → rejected in favor of stub
+| Alternative | Rejected Because |
+|---|---|
+| Groth16/Plonk instead of STARK | Elliptic curve based — not PQ secure |
+| FHE (BFV/CKKS) instead of Ring Regev | Multiplicative depth not needed; Ring Regev is simpler |
+| Sender-as-dummy for small pools | Leaks information — reduces effective anonymity set |
+| Single monolithic verifier contract | Harder to swap mock for real prover per circuit |
 
 ### C. Key Constraints and Limitations
 
-1. **Sender identity is public**: `msg.sender` is always visible on-chain. Only recipient anonymity is achieved.
-2. **Key derivation is not PQ-secure**: Deterministic key from ECDSA signature is quantum-vulnerable. Documented in UI.
-3. **72 KB calldata per transfer**: Practical on L2 only. L1 cost would be prohibitive.
-4. **Stub STARK proofs**: Until a real WASM prover is integrated, the ZK guarantee is not enforced. This is a prototype limitation.
-5. **Max 134 ETH per account**: Hard limit from q = 2²⁷ with szabo denomination. Sufficient for prototype.
-6. **Noise accumulation**: Up to MAX_DUMMY_USES=5000 HomAdds before refresh required. Silent failure is prevented by on-chain guard.
-7. **No sender amount privacy for withdrawal**: `amount` in `withdraw()` is a public uint256. Full privacy would require a range-proof-only circuit (possible future work).
-
-### D. Implementation Phases
-
-| Phase | Deliverable | Key Files |
-|-------|-------------|-----------|
-| 1 — Research | Library selection, gas estimates | `docs/research.md` |
-| 2 — Crypto Primitives | TypeScript Ring Regev + STARK circuits | `packages/crypto/` |
-| 3 — Smart Contract | PrivateTransfer.sol + tests | `packages/hardhat/contracts/`, `test/` |
-| 4 — Frontend | NextJS UI, 4 pages | `packages/nextjs/app/` |
-| 5 — Integration | 8 test scenarios, gas report | `packages/hardhat/test/integration/` |
+1. **Sender is always visible** — `msg.sender` is public. Only recipient anonymity is provided.
+2. **Mock STARK is not real ZK** — no actual zero-knowledge in the prototype. Must be prominently documented in UI and README.
+3. **Ciphertext ~8KB per slot** — each account uses ~16KB on-chain storage (balance + pk). Expensive on mainnet, acceptable on L2 for a prototype.
+4. **No key rotation** — `pk` is permanent once registered.
+5. **localStorage key storage** — private key is not hardware-protected. Acceptable for prototype only.
+6. **Noise budget** — Ring Regev noise grows with each HE.add. For `n=1024, q=2²⁷`, the budget supports ~50 homomorphic additions before decryption risk. This is a known limitation of the prototype; no in-UI warning is implemented (would require client-side received-transfer counting, which is left for a future iteration).

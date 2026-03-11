@@ -6,7 +6,7 @@ import { createRequire } from "module";
 import { dirname, join } from "path";
 import generateTsAbis from "./generateTsAbis.js";
 
-const IGNITION_MODULE = "ignition/modules/SE2Token.ts";
+const IGNITION_MODULE = "ignition/modules/PrivateTransfer.ts";
 const require = createRequire(import.meta.url);
 const HARDHAT_CLI_PATH = join(dirname(require.resolve("hardhat")), "cli.js");
 
