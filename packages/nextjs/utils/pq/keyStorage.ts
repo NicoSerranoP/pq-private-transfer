@@ -22,11 +22,3 @@ export function loadSecretKey(address: string): SecretKey | null {
     return null;
   }
 }
-
-export function hasSecretKey(address: string): boolean {
-  return localStorage.getItem(`${SK_PREFIX}${address.toLowerCase()}`) !== null;
-}
-
-export function removeSecretKey(address: string): void {
-  localStorage.removeItem(`${SK_PREFIX}${address.toLowerCase()}`);
-}
