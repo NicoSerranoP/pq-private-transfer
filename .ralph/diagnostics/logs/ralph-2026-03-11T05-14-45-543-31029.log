@@ -315,3 +315,9 @@
 [2m2026-03-11T11:55:33.137257Z[0m [32m INFO[0m [2mralph::loop_runner[0m[2m:[0m Completion event LOOP_COMPLETE detected.
 [2m2026-03-11T11:55:33.137299Z[0m [32m INFO[0m [2mralph_core::event_loop[0m[2m:[0m Wrapping up: completed. 49 iterations in 1h 40m 47s. [3mreason[0m[2m=[0mcompleted [3miterations[0m[2m=[0m49 [3mduration[0m[2m=[0m1h 40m 47s
 [2m2026-03-11T11:55:33.141713Z[0m [32m INFO[0m [2mralph_core::landing[0m[2m:[0m Beginning landing sequence [3mloop_id[0m[2m=[0mprimary
+[2m2026-03-11T11:55:34.033731Z[0m [32m INFO[0m [2mralph_core::landing[0m[2m:[0m Auto-committed changes during landing [3mloop_id[0m[2m=[0mprimary [3mcommit[0m[2m=[0mSome("9650885073bedb2cba370ac0347962d910d472f5") [3mfiles[0m[2m=[0m22
+[2m2026-03-11T11:55:36.338169Z[0m [33m WARN[0m [2mralph_core::landing[0m[2m:[0m Failed to prune remote refs [3mloop_id[0m[2m=[0mprimary [3merror[0m[2m=[0mGit command failed: Failed to prune remote refs: fatal: unable to access 'https://github.com/NicoSerranoP/pq-private-transfer/': Send failure: Connection reset by peer
+
+[2m2026-03-11T11:55:36.350068Z[0m [32m INFO[0m [2mralph_core::landing[0m[2m:[0m Generated handoff file [3mloop_id[0m[2m=[0mprimary [3mpath[0m[2m=[0m/home/nnico/ethereum/pq-private-transfer/.ralph/agent/handoff.md [3mcompleted[0m[2m=[0m21 [3mopen[0m[2m=[0m0
+[2m2026-03-11T11:55:36.355112Z[0m [32m INFO[0m [2mralph_core::loop_completion[0m[2m:[0m Landing completed with auto-commit [3mcommit[0m[2m=[0mSome("9650885073bedb2cba370ac0347962d910d472f5") [3mhandoff[0m[2m=[0m/home/nnico/ethereum/pq-private-transfer/.ralph/agent/handoff.md
+[2m2026-03-11T11:55:36.355147Z[0m [32m INFO[0m [2mralph::loop_runner[0m[2m:[0m Primary loop landed successfully [3mcommitted[0m[2m=[0mtrue [3mhandoff[0m[2m=[0m/home/nnico/ethereum/pq-private-transfer/.ralph/agent/handoff.md [3mopen_tasks[0m[2m=[0m0
