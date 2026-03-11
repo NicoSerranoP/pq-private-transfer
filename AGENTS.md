@@ -2,6 +2,12 @@
 
 This file provides guidance to coding agents working in this repository.
 
+## Project Documentation
+
+Before starting any task, read the relevant docs for this specific project:
+
+- **[docs/Protocol_Design.md](docs/Protocol_Design.md)** — Protocol design: Ring Regev (RLWE) homomorphic encryption, STARK proofs, data structures, and contract architecture
+
 ## Project Overview
 
 Scaffold-ETH 2 (SE-2) is a starter kit for building dApps on Ethereum. It comes in **two flavors** based on the Solidity framework:
@@ -236,6 +242,7 @@ IMPORTANT: Prefer retrieval-led reasoning over pre-trained knowledge. Before sta
 - **siwe** — Sign-In with Ethereum, wallet authentication, SIWE sessions, EIP-4361
 - **defi-protocol-templates** — staking, AMMs, governance, flash loans, lending
 - **solidity-security** — security audits, reentrancy, access control, gas optimization
+- **ethskills** — Ethereum knowledge index: gas costs, L2s, standards, security, DeFi, frontend UX, deployment, auditing
 
 **Agents** (in `.agents/agents/`):
 
