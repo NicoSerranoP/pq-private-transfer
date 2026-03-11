@@ -23,7 +23,7 @@
     "hardhat:check-types": "pnpm --filter @se-2/hardhat check-types",
     "hardhat:clean": "pnpm --filter @se-2/hardhat clean",
     "hardhat:compile": "pnpm --filter @se-2/hardhat compile",
-    "hardhat:deploy": "pnpm --filter @se-2/hardhat deploy",
+    "hardhat:deploy": "pnpm --filter @se-2/hardhat run deploy",
     "hardhat:flatten": "pnpm --filter @se-2/hardhat flatten",
     "hardhat:fork": "pnpm --filter @se-2/hardhat fork",
     "hardhat:format": "pnpm --filter @se-2/hardhat format",
