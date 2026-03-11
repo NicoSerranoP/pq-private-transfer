@@ -5,6 +5,8 @@ Implement a post-quantum anonymous transfer protocol on Ethereum using Scaffold-
 The protocol uses Ring Regev (RLWE) homomorphic encryption for confidential balances and client-side STARKs for zero-knowledge proofs.
 Transfers achieve recipient anonymity via ORAM-inspired dummy recipients (N=4: 1 real + 3 dummies).
 
+Read more about the protocol design and cryptographic primitives in `docs/Protocol_Design.md`.
+
 ## Tech Stack
 - **Smart Contracts:** Solidity + Hardhat
 - **Frontend:** NextJS (Scaffold-ETH)
