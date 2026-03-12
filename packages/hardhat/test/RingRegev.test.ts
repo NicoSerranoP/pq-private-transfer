@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { network } from "hardhat";
+import { RingRegevHarness } from "../typechain-types/index.js";
 
 const Q = 134217728n; // 2^27
 const N = 1024;
@@ -34,7 +35,7 @@ function decodeCiphertext(buf: Uint8Array): bigint[] {
 }
 
 describe("RingRegev", function () {
-  let harness: Awaited<ReturnType<Awaited<ReturnType<typeof network.connect>>["ethers"]["deployContract"]>>;
+  let harness: RingRegevHarness;
 
   before(async function () {
     const { ethers } = await network.connect();

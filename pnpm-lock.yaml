@@ -88,6 +88,9 @@ importers:
       '@typechain/ethers-v6':
         specifier: ^0.5.1
         version: 0.5.1(ethers@6.16.0(bufferutil@4.1.0)(utf-8-validate@6.0.6))(typechain@8.3.2(typescript@5.8.3))(typescript@5.8.3)
+      '@types/chai':
+        specifier: ^5.2.3
+        version: 5.2.3
       '@types/mocha':
         specifier: ~10.0.10
         version: 10.0.10
