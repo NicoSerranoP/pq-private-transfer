@@ -1,0 +1,249 @@
+== pnpm --filter @pq/crypto test ==
+
+> @pq/crypto@0.0.1 test /home/nnico/ethereum/pq-private-transfer/packages/crypto
+> node --import tsx/esm --test src/*.test.ts src/**/*.test.ts
+
+▶ keygen
+  ✔ returns pk and sk of correct length (29.164781ms)
+  ✔ all coefficients are in [0, q) (20.06131ms)
+✔ keygen (50.18981ms)
+▶ encrypt / decrypt
+  ✔ decrypt(encrypt(m)) === m for small values (280.199389ms)
+  ✔ deterministic when r is provided (58.931019ms)
+  ✔ different r produces different ciphertext (54.689455ms)
+✔ encrypt / decrypt (394.201393ms)
+▶ homomorphic add
+  ✔ add preserves plaintext sum (107.865065ms)
+✔ homomorphic add (108.085122ms)
+▶ homomorphic sub
+  ✔ sub preserves plaintext difference (86.866808ms)
+✔ homomorphic sub (87.068219ms)
+▶ homomorphicSum
+  ✔ sums multiple ciphertexts (141.212802ms)
+✔ homomorphicSum (141.369315ms)
+▶ serialization
+  ✔ serializeCiphertext produces 8192 bytes (39.495563ms)
+  ✔ serializePublicKey produces 8192 bytes (14.21311ms)
+  ✔ deserializeCiphertext roundtrips correctly (54.050226ms)
+✔ serialization (107.954899ms)
+▶ depositCircuit
+  ✔ prove/verify roundtrip succeeds (71.237176ms)
+  ✔ proof has 32-byte commitment (88.209556ms)
+  ✔ tampered commitment fails verification (40.954196ms)
+  ✔ tampered inputs fail verification (45.507221ms)
+✔ depositCircuit (247.072197ms)
+▶ transferCircuit
+  ✔ prove/verify roundtrip succeeds with the reduced transfer API (268.652902ms)
+  ✔ proof has 32-byte commitment (193.888776ms)
+  ✔ tampered commitment fails verification (189.623304ms)
+✔ transferCircuit (653.228353ms)
+▶ withdrawCircuit
+  ✔ prove/verify roundtrip succeeds (155.726556ms)
+  ✔ proof has 32-byte commitment (83.294461ms)
+  ✔ tampered inputs fail verification (80.455902ms)
+✔ withdrawCircuit (320.642299ms)
+▶ types
+  ✔ Polynomial is an array of bigints with length 1024 (0.666393ms)
+  ✔ Ciphertext has a and b polynomials (0.240216ms)
+  ✔ PublicKey has a and b polynomials (0.163667ms)
+  ✔ SecretKey is a Polynomial (0.184237ms)
+  ✔ ZKProof has commitment and inputs fields (0.219096ms)
+✔ types (2.508254ms)
+ℹ tests 26
+ℹ suites 10
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1130.954033
+== pnpm --filter @pq/crypto check-types ==
+
+> @pq/crypto@0.0.1 check-types /home/nnico/ethereum/pq-private-transfer/packages/crypto
+> tsc --noEmit
+
+== pnpm compile ==
+
+> se-2@0.0.1 compile /home/nnico/ethereum/pq-private-transfer
+> pnpm hardhat:compile
+
+
+> se-2@0.0.1 hardhat:compile /home/nnico/ethereum/pq-private-transfer
+> pnpm --filter @se-2/hardhat compile
+
+
+> @se-2/hardhat@0.0.1 compile /home/nnico/ethereum/pq-private-transfer/packages/hardhat
+> hardhat build
+
+No contracts to compile
+No Solidity tests to compile
+== pnpm hardhat:test ==
+
+> se-2@0.0.1 hardhat:test /home/nnico/ethereum/pq-private-transfer
+> pnpm --filter @se-2/hardhat test
+
+
+> @se-2/hardhat@0.0.1 test /home/nnico/ethereum/pq-private-transfer/packages/hardhat
+> hardhat test
+
+No contracts to compile
+No Solidity tests to compile
+
+Running Solidity tests
+
+
+Running Mocha tests
+
+
+  PrivateTransfer
+    register
+      ✔ stores pk and encryptedBalance on first registration (38ms)
+      ✔ increments totalDeposits on registration
+      ✔ emits Registered event
+      ✔ reverts if already registered
+      ✔ reverts if msg.value is zero
+      ✔ reverts if proof is invalid (zero commitment)
+      ✔ isRegistered returns true after registration
+      ✔ isRegistered returns false for unregistered address
+    withdraw
+      ✔ updates encryptedBalance and decrements totalDeposits (41ms)
+      ✔ pays out ETH to caller
+      ✔ emits Withdrawn event
+      ✔ reverts if amount is zero
+      ✔ reverts if proof is invalid
+      ✔ reverts if caller is not registered
+    transfer
+      ✔ exposes transfer ABI without sender update ciphertexts
+      ✔ updates sender and all 4 recipient encrypted balances (4467ms)
+      ✔ emits Transferred event with correct sender and recipients (1863ms)
+      ✔ reverts if recipient array lengths mismatch
+      ✔ reverts if sender is not registered
+      ✔ reverts if a recipient is not registered
+      ✔ reverts if proof is invalid
+      ✔ reverts when sender is included as recipient
+      ✔ reverts when recipient list contains duplicates
+      ✔ reverts when pool is too small (fewer than N+1 registered users) (75ms)
+      ✔ reverts when the same commitment is reused (double-spend) (1104ms)
+      ✔ tracks totalRegistered correctly (72ms)
+
+  RingRegev
+    ✔ add: identity (enc_a + enc_zero = enc_a) (108ms)
+    ✔ sub: self-cancel (enc_a - enc_a = enc_zero) (101ms)
+    ✔ add: output has length 8192 bytes (88ms)
+    ✔ add: overflow wraps mod q (87ms)
+    ✔ sub: underflow wraps mod q (always positive) (89ms)
+    ✔ add/sub: invalid length reverts with InvalidCiphertextLength
+
+  Verifier Contracts
+    DepositVerifier
+      ✔ accepts a valid proof (non-zero commitment + non-empty inputs)
+      ✔ rejects zero commitment
+      ✔ rejects empty inputs
+    TransferVerifier
+      ✔ accepts a valid proof (non-zero commitment + non-empty inputs)
+      ✔ rejects zero commitment
+      ✔ rejects empty inputs
+    WithdrawVerifier
+      ✔ accepts a valid proof (non-zero commitment + non-empty inputs)
+      ✔ rejects zero commitment
+      ✔ rejects empty inputs
+
+
+  41 passing (10s)
+
+
+41 passing (41 mocha)
+
+== pnpm next:check-types ==
+
+> se-2@0.0.1 next:check-types /home/nnico/ethereum/pq-private-transfer
+> pnpm --filter @se-2/nextjs check-types
+
+
+> @se-2/nextjs@0.1.0 check-types /home/nnico/ethereum/pq-private-transfer/packages/nextjs
+> tsc --noEmit --incremental
+
+== pnpm next:build ==
+
+> se-2@0.0.1 next:build /home/nnico/ethereum/pq-private-transfer
+> pnpm --filter @se-2/nextjs build
+
+
+> @se-2/nextjs@0.1.0 build /home/nnico/ethereum/pq-private-transfer/packages/nextjs
+> next build
+
+   ▲ Next.js 15.2.9
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+
+ ⚠ The Next.js plugin was not detected in your ESLint configuration. See https://nextjs.org/docs/app/api-reference/config/eslint#migrating-existing-config
+   Collecting page data ...
+   Generating static pages (0/12) ...
+   Generating static pages (3/12) 
+   Generating static pages (6/12) 
+   Generating static pages (9/12) 
+ ✓ Generating static pages (12/12)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                                                     Size  First Load JS
+┌ ○ /                                                                        1.78 kB         459 kB
+├ ○ /_not-found                                                                145 B         104 kB
+├ ○ /blockexplorer                                                           1.42 kB         462 kB
+├ ● /blockexplorer/address/[address]                                           710 B         461 kB
+├   └ /blockexplorer/address/0x0000000000000000000000000000000000000000
+├ ● /blockexplorer/transaction/[txHash]                                      1.44 kB         348 kB
+├   └ /blockexplorer/transaction/0x0000000000000000000000000000000000000000
+├ ○ /debug                                                                   15.5 kB         470 kB
+├ ○ /erc20                                                                   2.15 kB         457 kB
+├ ○ /register                                                                3.02 kB         407 kB
+├ ○ /transfer                                                                3.07 kB         407 kB
+└ ○ /withdraw                                                                2.81 kB         407 kB
++ First Load JS shared by all                                                 104 kB
+  ├ chunks/4952-789ba89b7518ad37.js                                          45.9 kB
+  ├ chunks/5b205710-31114cc0532be7c0.js                                      53.3 kB
+  └ other shared chunks (total)                                              4.54 kB
+
+
+○  (Static)  prerendered as static content
+●  (SSG)     prerendered as static HTML (uses generateStaticParams)
+
+== pnpm lint ==
+
+> se-2@0.0.1 lint /home/nnico/ethereum/pq-private-transfer
+> pnpm next:lint && pnpm hardhat:lint
+
+
+> se-2@0.0.1 next:lint /home/nnico/ethereum/pq-private-transfer
+> pnpm --filter @se-2/nextjs lint
+
+
+> @se-2/nextjs@0.1.0 lint /home/nnico/ethereum/pq-private-transfer/packages/nextjs
+> eslint .
+
+
+> se-2@0.0.1 hardhat:lint /home/nnico/ethereum/pq-private-transfer
+> pnpm --filter @se-2/hardhat lint
+
+
+> @se-2/hardhat@0.0.1 lint /home/nnico/ethereum/pq-private-transfer/packages/hardhat
+> eslint
+
+
+/home/nnico/ethereum/pq-private-transfer/packages/hardhat/test/PrivateTransfer.test.ts
+  247:21  warning  Replace `⏎········.connect(signers[4])⏎········` with `.connect(signers[4])`        prettier/prettier
+  266:17  warning  Replace `⏎··········.connect(signers[4])⏎··········` with `.connect(signers[4])`    prettier/prettier
+  281:17  warning  Replace `⏎··········.connect(signers[4])⏎··········` with `.connect(signers[4])`    prettier/prettier
+  294:17  warning  Replace `⏎··········.connect(signers[16])⏎··········` with `.connect(signers[16])`  prettier/prettier
+  307:17  warning  Replace `⏎··········.connect(signers[4])⏎··········` with `.connect(signers[4])`    prettier/prettier
+  319:17  warning  Replace `⏎··········.connect(signers[4])⏎··········` with `.connect(signers[4])`    prettier/prettier
+  332:17  warning  Replace `⏎··········.connect(signers[4])⏎··········` with `.connect(signers[4])`    prettier/prettier
+  345:17  warning  Replace `⏎··········.connect(signers[4])⏎··········` with `.connect(signers[4])`    prettier/prettier
+  371:14  warning  Replace `⏎··········.connect(signers[11])⏎··········` with `.connect(signers[11])`  prettier/prettier
+  389:17  warning  Replace `⏎··········.connect(signers[4])⏎··········` with `.connect(signers[4])`    prettier/prettier
+
+✖ 10 problems (0 errors, 10 warnings)
+  0 errors and 10 warnings potentially fixable with the `--fix` option.
+

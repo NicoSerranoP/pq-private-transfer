@@ -1,0 +1,41 @@
+
+> se-2@0.0.1 deploy /home/nnico/ethereum/pq-private-transfer
+> pnpm hardhat:deploy "--network" "localhost"
+
+
+> se-2@0.0.1 hardhat:deploy /home/nnico/ethereum/pq-private-transfer
+> pnpm --filter @se-2/hardhat run deploy "--network" "localhost"
+
+
+> @se-2/hardhat@0.0.1 deploy /home/nnico/ethereum/pq-private-transfer/packages/hardhat
+> node --import tsx/esm scripts/runHardhatDeployWithPK.ts "--network" "localhost"
+
+
+
+
+
+
+
+
+Hardhat Ignition starting for [ PrivateTransferModule ]...[2K[1GHardhat Ignition 🚀
+
+Deploying [ PrivateTransferModule ]
+
+Batch #1
+  Executing PrivateTransferModule#PrivateTransfer...
+
+[3A[0JBatch #1
+  Executing PrivateTransferModule#PrivateTransfer...
+
+[3A[0JBatch #1
+  Executed PrivateTransferModule#PrivateTransfer
+
+[3A[0JBatch #1
+  Executed PrivateTransferModule#PrivateTransfer
+
+[ PrivateTransferModule ] successfully deployed 🚀
+
+Deployed Addresses
+
+PrivateTransferModule#PrivateTransfer - 0x5FbDB2315678afecb367f032d93F642f64180aa3
+📝 Updated TypeScript contract definition file on ../nextjs/contracts/deployedContracts.ts

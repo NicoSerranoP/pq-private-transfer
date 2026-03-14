@@ -1,0 +1,14 @@
+No contracts to compile
+Running Mocha tests
+
+
+  Hardhat node network config
+    ✔ pins the JSON-RPC node network to Prague
+    ✔ keeps localhost node and default simulated network settings aligned
+
+
+  2 passing (3ms)
+
+
+2 passing (2 mocha)
+

@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { network } from "hardhat";
-import { RingRegevHarness } from "../typechain-types/index.js";
+import type { RingRegevHarness } from "../typechain-types/index.js";
 
 const Q = 134217728n; // 2^27
 const N = 1024;

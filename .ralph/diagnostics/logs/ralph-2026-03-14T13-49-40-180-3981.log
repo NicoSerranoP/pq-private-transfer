@@ -1,0 +1,4 @@
+2026-03-14T18:49:40.187831Z  INFO ralph: Creating scratchpad directory: /home/nnico/ethereum/pq-private-transfer/.ralph/agent
+2026-03-14T18:49:40.190155Z  INFO ralph: Spawning subprocess for TUI mode child_args=["-c", "ralph.yml", "-H", "builtin:pdd-to-code-assist", "run", "--rpc", "-p", "Please modify the whole repo to remove the encrypted balance to update sender and instead only use enc_total. Modify the docs, code, packages and tests"]
+2026-03-14T18:49:40.190574Z  INFO ralph: TUI subprocess stderr redirected to log file log_file=/home/nnico/ethereum/pq-private-transfer/.ralph/diagnostics/logs/ralph-2026-03-14T13-49-40-190-3981.log
+2026-03-14T18:49:40.192248Z  INFO ralph: TUI running in subprocess RPC mode

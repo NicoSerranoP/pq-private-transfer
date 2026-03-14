@@ -39,8 +39,12 @@ Post-quantum anonymous transfer protocol on Ethereum. Confidential balances via 
 |---|---|---|
 | `register(pk, initialBalance, depositProof)` | ✅ | One-time, verifies Deposit proof, stores balance |
 | `deposit(encAmount, depositProof)` | ✅ | Must be registered, HE.add to existing balance |
-| `transfer(recipients[4], encBalanceToUpdateReceiver[4], encBalanceToUpdateSender[4], encTotal, proof)` | ❌ | 4 distinct registered recipients ≠ sender, verifies Transfer proof |
+| `transfer(recipients[4], encBalanceToUpdateReceiver[4], encTotal, proof)` | ❌ | 4 distinct registered recipients ≠ sender, verifies Transfer proof |
 | `withdraw(amount, encAmount, encNewBalance, proof)` | ❌ | Verifies Withdrawal proof, CEI pattern, reentrancy guard |
+
+- Transfer no longer includes `encBalanceToUpdateSender[4]` in the proof public outputs, contract ABI, or frontend call surface.
+- Transfer also removes sender-side per-recipient randomness `r_sender[4]` and deletes the old homomorphic-sum constraint 8 entirely.
+- This is an intentional repo-wide breaking change; the repo does not need dual support for old and new transfer public-input layouts.
 
 ## R6 — On-chain HE Library
 - Solidity library `RingRegev` with `add(bytes, bytes)` and `sub(bytes, bytes)`

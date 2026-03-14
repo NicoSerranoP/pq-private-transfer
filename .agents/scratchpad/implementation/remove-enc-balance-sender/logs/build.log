@@ -1,0 +1,14 @@
+
+> se-2@0.0.1 compile /home/nnico/ethereum/pq-private-transfer
+> pnpm hardhat:compile
+
+
+> se-2@0.0.1 hardhat:compile /home/nnico/ethereum/pq-private-transfer
+> pnpm --filter @se-2/hardhat compile
+
+
+> @se-2/hardhat@0.0.1 compile /home/nnico/ethereum/pq-private-transfer/packages/hardhat
+> hardhat build
+
+No contracts to compile
+No Solidity tests to compile
