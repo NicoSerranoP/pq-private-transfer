@@ -12,6 +12,18 @@ const deployerPrivateKey =
 // If not set, it uses our block explorers default API keys.
 const etherscanApiKey = process.env.ETHERSCAN_V2_API_KEY || "DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW";
 
+function createLocalSimulatedNetwork() {
+  return {
+    type: "edr-simulated" as const,
+    chainType: "l1" as const,
+    hardfork: "prague",
+    forking: {
+      url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
+      enabled: process.env.MAINNET_FORKING_ENABLED === "true",
+    },
+  };
+}
+
 export default defineConfig({
   plugins: [hardhatToolboxMochaEthers],
   solidity: {
@@ -31,16 +43,10 @@ export default defineConfig({
   networks: {
     // View the networks that are pre-configured.
     // If the network you are looking for is not here you can add new network settings
-    // Hardhat 3: default EDR network is "default", not "hardhat"
-    // Use prague hardfork to avoid EIP-7825 (Osaka) 16MB per-tx gas cap
-    default: {
-      type: "edr-simulated",
-      hardfork: "prague",
-      forking: {
-        url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
-        enabled: process.env.MAINNET_FORKING_ENABLED === "true",
-      },
-    },
+    // Hardhat 3 uses "default" for in-process runs and "node" for `hardhat node`.
+    // Keep both on Prague to avoid Osaka's EIP-7825 16MB per-tx gas cap.
+    default: createLocalSimulatedNetwork(),
+    node: createLocalSimulatedNetwork(),
     localhost: {
       type: "http",
       url: "http://127.0.0.1:8545",

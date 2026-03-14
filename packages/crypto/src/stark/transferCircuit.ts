@@ -7,7 +7,6 @@ export type TransferPublicInputs = {
   pks: [PublicKey, PublicKey, PublicKey, PublicKey];
   encBalanceSender: Ciphertext;
   encBalanceToUpdateReceiver: [Ciphertext, Ciphertext, Ciphertext, Ciphertext];
-  encBalanceToUpdateSender: [Ciphertext, Ciphertext, Ciphertext, Ciphertext];
   encTotal: Ciphertext;
 };
 
@@ -17,7 +16,6 @@ export type TransferPrivateInputs = {
   amounts: [bigint, bigint, bigint, bigint];
   total: bigint;
   rReceiver: [Polynomial, Polynomial, Polynomial, Polynomial];
-  rSender: [Polynomial, Polynomial, Polynomial, Polynomial];
   rTotal: Polynomial;
 };
 
@@ -27,7 +25,6 @@ function serializeTransferPublic(pub: TransferPublicInputs): Uint8Array {
     ...pub.pks.map(serializePublicKey),
     serializeCiphertext(pub.encBalanceSender),
     ...pub.encBalanceToUpdateReceiver.map(serializeCiphertext),
-    ...pub.encBalanceToUpdateSender.map(serializeCiphertext),
     serializeCiphertext(pub.encTotal),
   ];
   const totalLen = parts.reduce((s, p) => s + p.length, 0);

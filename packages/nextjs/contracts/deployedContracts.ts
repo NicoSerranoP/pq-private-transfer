@@ -262,11 +262,6 @@ const deployedContracts = {
               type: "bytes[]",
             },
             {
-              internalType: "bytes[]",
-              name: "encBalanceToUpdateSender",
-              type: "bytes[]",
-            },
-            {
               internalType: "bytes",
               name: "encTotal",
               type: "bytes",
@@ -315,7 +310,7 @@ const deployedContracts = {
             },
             {
               internalType: "bytes",
-              name: "encAmount",
+              name: "",
               type: "bytes",
             },
             {

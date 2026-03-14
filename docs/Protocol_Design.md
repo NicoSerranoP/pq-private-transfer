@@ -26,10 +26,9 @@
 **Per transfer calldata breakdown:**
 ```
 enc_balance_to_update_receiver[4]  = 4 × 8 KB = 32 KB
-enc_balance_to_update_sender[4]    = 4 × 8 KB = 32 KB
 enc_total                          =     1 × 8 KB =  8 KB
 ─────────────────────────────────────────────────────────
-Total ciphertext calldata          ≈ 72 KB
+Total ciphertext calldata          ≈ 40 KB
 ```
 
 > For the prototype this is acceptable. Production would compress coefficients and batch multiple transfers.
@@ -49,7 +48,6 @@ Account {
 Transfer {
   recipients: address[N]                      // 1 real + N-1 dummies
   enc_balance_to_update_receiver: Ciphertext[N]  // HEpk_i(amount_i)
-  enc_balance_to_update_sender: Ciphertext[N]    // HEpkB(amount_i) for each i
   enc_total: Ciphertext                       // HEpkB(sum) for sender deduction
   proof: ZKProof
 }
@@ -98,15 +96,13 @@ Proves that `initialBalance` is a valid encryption of `msg.value` under `pk`.
 3. amounts[N]                   // amount_i per recipient (one real, rest 0)
 4. total                        // sum of amounts[N]
 5. r_receiver[N]                // randomness for receiver-key encryptions
-6. r_sender[N]                  // randomness for sender-key encryptions
-7. r_total                      // randomness for total encryption
+6. r_total                      // randomness for total encryption
 ```
 
 ### Public Outputs
 ```
 1. enc_balance_to_update_receiver[N]  // HEpk_i(amount_i) — added to recipient balances
-2. enc_balance_to_update_sender[N]   // HEpkB(amount_i)  — for sum verification on-chain
-3. enc_total                         // HEpkB(total)     — subtracted from sender balance
+2. enc_total                         // HEpkB(total)     — subtracted from sender balance
 ```
 
 ### Constraints (encoded as STARK trace)
@@ -120,15 +116,10 @@ Proves that `initialBalance` is a valid encryption of `msg.value` under `pk`.
 4. amounts[i] >= 0  for all i in N
 
 5. enc_balance_to_update_receiver[i] == RingRegev.Encrypt(amounts[i], pk[i], r_receiver[i])  for all i
-6. enc_balance_to_update_sender[i]   == RingRegev.Encrypt(amounts[i], pkB,   r_sender[i])    for all i
-
-7. enc_total == RingRegev.Encrypt(total, pkB, r_total)
-
-// Homomorphic sum verification (done inside circuit):
-8. RingRegev.HomomorphicSum(enc_balance_to_update_sender[N]) == enc_total
+6. enc_total == RingRegev.Encrypt(total, pkB, r_total)
 ```
 
-> Constraint 8 lets the contract trust `enc_total` without re-summing ciphertexts — the proof guarantees consistency.
+> The proof now binds sender deduction through `total` and `enc_total` alone; there is no separate sender-key ciphertext array to sum inside the circuit.
 
 ---
 
@@ -168,6 +159,12 @@ Proves the user owns a balance >= withdrawal amount without revealing the balanc
 > Constraint 6 lets the contract trust `encNewBalance` is consistent with the current on-chain balance, preventing a user from lying about their new balance after withdrawal.
 
 ---
+
+The current Solidity transfer ABI is:
+
+```solidity
+transfer(recipients, encBalanceToUpdateReceiver, encTotal, commitment, proofInputs)
+```
 
 ```solidity
 contract PrivateTransfer {
@@ -249,44 +246,26 @@ contract PrivateTransfer {
     function transfer(
         address[]    calldata recipients,                   // length N
         Ciphertext[] calldata encBalanceToUpdateReceiver,   // HEpk_i(amount_i), length N
-        Ciphertext[] calldata encBalanceToUpdateSender,     // HEpkB(amount_i),  length N
         Ciphertext   calldata encTotal,                     // HEpkB(total)
-        ZKProof      calldata proof
+        bytes32      commitment,
+        bytes        calldata proofInputs
     ) external {
         uint N = recipients.length;
         require(N == encBalanceToUpdateReceiver.length, "length mismatch");
-        require(N == encBalanceToUpdateSender.length,   "length mismatch");
 
-        // ── 1. Build public inputs for verifier ──────────────────
+        // Verify recipient registration/distinctness and validate the proof.
+        // The serialized proof inputs already contain:
+        //   pkB, pk[N], HEpkB(balance_B), enc_balance_to_update_receiver[N], enc_total
+        require(STARKVerifier.verify(commitment, proofInputs), "invalid proof");
 
-        PublicKey[] memory recipientKeys = new PublicKey[](N);
-        for (uint i = 0; i < N; i++) {
-            address r = recipients[i];
-            require(accounts[r].publicKey != 0, "recipient not registered");
-            recipientKeys[i] = accounts[r].publicKey;
-        }
-
-        PublicInput memory pub = PublicInput({
-            pkB                         : accounts[msg.sender].publicKey,
-            recipientKeys               : recipientKeys,
-            encBalanceB                 : accounts[msg.sender].encryptedBalance,
-            encBalanceToUpdateReceiver  : encBalanceToUpdateReceiver,
-            encBalanceToUpdateSender    : encBalanceToUpdateSender,
-            encTotal                    : encTotal
-        });
-
-        // ── 2. Verify STARK proof ────────────────────────────────
-
-        require(STARKVerifier.verify(pub, proof), "invalid proof");
-
-        // ── 3. Deduct from sender (Ring Regev homomorphic sub) ───
+        // Deduct from sender using only enc_total.
 
         accounts[msg.sender].encryptedBalance = RingRegev.sub(
             accounts[msg.sender].encryptedBalance,
             encTotal
         );
 
-        // ── 4. Credit all recipients (Ring Regev homomorphic add)
+        // Credit all recipients.
 
         for (uint i = 0; i < N; i++) {
             accounts[recipients[i]].encryptedBalance = RingRegev.add(
@@ -305,7 +284,7 @@ contract PrivateTransfer {
 ```
 msg.sender  = Bob                          // sender known
 recipients  = [Alice, Carol, Dave, Eve]    // can't tell which is real
-encBalancesToUpdate = [HE(?), HE(?), HE(?), HE(?)] // all ciphertexts, indistinguishable
+encBalanceToUpdateReceiver = [HE(?), HE(?), HE(?), HE(?)] // receiver ciphertexts, indistinguishable
 encTotal    = HE(?)                        // total deducted, hidden
 proof       = π                            // only proves validity, reveals nothing
 ```
@@ -320,6 +299,6 @@ proof       = π                            // only proves validity, reveals not
 | Recipient anonymity | ✅ | 1-of-N indistinguishable |
 | Amount privacy | ✅ | All amounts encrypted |
 | Balance integrity | ✅ | ZK constraint 2 prevents overdraft |
-| No inflation | ✅ | ZK constraints 3 + 8 |
+| No inflation | ✅ | ZK constraints 3, 5, and 6 |
 | Dummy indistinguishability | ✅ | Enc(0) == Enc(x) under randomized HE |
 | Double spend | ✅ | On-chain balance updated atomically |

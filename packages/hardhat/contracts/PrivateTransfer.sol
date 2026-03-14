@@ -127,7 +127,6 @@ contract PrivateTransfer is ReentrancyGuard {
      * @notice Transfer encrypted amounts to N=4 recipients (1 real + 3 dummies).
      * @param recipients                  Array of N recipient addresses
      * @param encBalanceToUpdateReceiver  HEpk_i(amount_i) for each recipient
-     * @param encBalanceToUpdateSender    HEpkB(amount_i) for each recipient (for sender deduction)
      * @param encTotal                    HEpkB(total) — sum of all amounts
      * @param commitment                  STARK proof commitment
      * @param proofInputs                 STARK proof serialized public inputs
@@ -135,13 +134,12 @@ contract PrivateTransfer is ReentrancyGuard {
     function transfer(
         address[] calldata recipients,
         bytes[] calldata encBalanceToUpdateReceiver,
-        bytes[] calldata encBalanceToUpdateSender,
         bytes calldata encTotal,
         bytes32 commitment,
         bytes calldata proofInputs
     ) external {
         uint256 n = recipients.length;
-        if (n != encBalanceToUpdateReceiver.length || n != encBalanceToUpdateSender.length) revert LengthMismatch();
+        if (n != encBalanceToUpdateReceiver.length) revert LengthMismatch();
         if (accounts[msg.sender].publicKey.length == 0) revert NotRegistered();
         // Need at least n+1 registered users (sender + n distinct recipients)
         if (totalRegistered < n + 1) revert InsufficientPool(totalRegistered, n + 1);

@@ -224,19 +224,27 @@ describe("PrivateTransfer", function () {
       });
     });
 
+    it("exposes transfer ABI without sender update ciphertexts", async function () {
+      const transferFragment = contract.interface.getFunction("transfer");
+      expect(transferFragment.inputs.map(({ name }: { name: string }) => name)).to.deep.equal([
+        "recipients",
+        "encBalanceToUpdateReceiver",
+        "encTotal",
+        "commitment",
+        "proofInputs",
+      ]);
+    });
+
     it("updates sender and all 4 recipient encrypted balances", async function () {
       const recipients = [signers[1].address, signers[2].address, signers[3].address, signers[5].address];
       // Use validCiphertext so RingRegev.sub/add won't panic (coefficients must be < Q)
       const encReceiver = [validCiphertext(60), validCiphertext(61), validCiphertext(62), validCiphertext(63)];
-      const encSender = [validCiphertext(64), validCiphertext(65), validCiphertext(66), validCiphertext(67)];
       const encTotal = validCiphertext(68);
 
       const senderBalBefore = (await contract.accounts(signers[4].address)).encryptedBalance;
       const recv0BalBefore = (await contract.accounts(signers[1].address)).encryptedBalance;
 
-      await contract
-        .connect(signers[4])
-        .transfer(recipients, encReceiver, encSender, encTotal, validCommitment, validProofInputs);
+      await contract.connect(signers[4]).transfer(recipients, encReceiver, encTotal, validCommitment, validProofInputs);
 
       // Sender balance changed (RingRegev.sub applied)
       const senderAcc = await contract.accounts(signers[4].address);
@@ -250,13 +258,10 @@ describe("PrivateTransfer", function () {
     it("emits Transferred event with correct sender and recipients", async function () {
       const recipients = [signers[1].address, signers[2].address, signers[3].address, signers[5].address];
       const encReceiver = [validCiphertext(70), validCiphertext(71), validCiphertext(72), validCiphertext(73)];
-      const encSender = [validCiphertext(74), validCiphertext(75), validCiphertext(76), validCiphertext(77)];
       const encTotal = validCiphertext(78);
 
       await expect(
-        contract
-          .connect(signers[4])
-          .transfer(recipients, encReceiver, encSender, encTotal, validCommitment2, validProofInputs),
+        contract.connect(signers[4]).transfer(recipients, encReceiver, encTotal, validCommitment2, validProofInputs),
       )
         .to.emit(contract, "Transferred")
         .withArgs(signers[4].address, recipients);
@@ -266,13 +271,10 @@ describe("PrivateTransfer", function () {
       // 3 recipients but 4 encReceiver arrays
       const recipients = [signers[1].address, signers[2].address, signers[3].address];
       const encReceiver = [fakeCiphertext(80), fakeCiphertext(81), fakeCiphertext(82), fakeCiphertext(83)];
-      const encSender = [fakeCiphertext(84), fakeCiphertext(85), fakeCiphertext(86), fakeCiphertext(87)];
       const encTotal = fakeCiphertext(88);
 
       await expect(
-        contract
-          .connect(signers[4])
-          .transfer(recipients, encReceiver, encSender, encTotal, validCommitment, validProofInputs),
+        contract.connect(signers[4]).transfer(recipients, encReceiver, encTotal, validCommitment, validProofInputs),
       ).to.be.revertedWithCustomError(contract, "LengthMismatch");
     });
 
@@ -280,13 +282,10 @@ describe("PrivateTransfer", function () {
       // signers[16] is never registered
       const recipients = [signers[1].address, signers[2].address, signers[3].address, signers[4].address];
       const encReceiver = [fakeCiphertext(90), fakeCiphertext(91), fakeCiphertext(92), fakeCiphertext(93)];
-      const encSender = [fakeCiphertext(94), fakeCiphertext(95), fakeCiphertext(96), fakeCiphertext(97)];
       const encTotal = fakeCiphertext(98);
 
       await expect(
-        contract
-          .connect(signers[16])
-          .transfer(recipients, encReceiver, encSender, encTotal, validCommitment, validProofInputs),
+        contract.connect(signers[16]).transfer(recipients, encReceiver, encTotal, validCommitment, validProofInputs),
       ).to.be.revertedWithCustomError(contract, "NotRegistered");
     });
 
@@ -294,26 +293,20 @@ describe("PrivateTransfer", function () {
       // signers[17] is not registered
       const recipients = [signers[1].address, signers[2].address, signers[3].address, signers[17].address];
       const encReceiver = [fakeCiphertext(100), fakeCiphertext(101), fakeCiphertext(102), fakeCiphertext(103)];
-      const encSender = [fakeCiphertext(104), fakeCiphertext(105), fakeCiphertext(106), fakeCiphertext(107)];
       const encTotal = fakeCiphertext(108);
 
       await expect(
-        contract
-          .connect(signers[4])
-          .transfer(recipients, encReceiver, encSender, encTotal, validCommitment, validProofInputs),
+        contract.connect(signers[4]).transfer(recipients, encReceiver, encTotal, validCommitment, validProofInputs),
       ).to.be.revertedWithCustomError(contract, "RecipientNotRegistered");
     });
 
     it("reverts if proof is invalid", async function () {
       const recipients = [signers[1].address, signers[2].address, signers[3].address, signers[5].address];
       const encReceiver = [fakeCiphertext(110), fakeCiphertext(111), fakeCiphertext(112), fakeCiphertext(113)];
-      const encSender = [fakeCiphertext(114), fakeCiphertext(115), fakeCiphertext(116), fakeCiphertext(117)];
       const encTotal = fakeCiphertext(118);
 
       await expect(
-        contract
-          .connect(signers[4])
-          .transfer(recipients, encReceiver, encSender, encTotal, zeroCommitment, validProofInputs),
+        contract.connect(signers[4]).transfer(recipients, encReceiver, encTotal, zeroCommitment, validProofInputs),
       ).to.be.revertedWithCustomError(contract, "InvalidProof");
     });
 
@@ -321,13 +314,10 @@ describe("PrivateTransfer", function () {
       // signers[4] is sender and also in recipients list
       const recipients = [signers[1].address, signers[2].address, signers[3].address, signers[4].address];
       const encReceiver = [fakeCiphertext(120), fakeCiphertext(121), fakeCiphertext(122), fakeCiphertext(123)];
-      const encSender = [fakeCiphertext(124), fakeCiphertext(125), fakeCiphertext(126), fakeCiphertext(127)];
       const encTotal = fakeCiphertext(128);
 
       await expect(
-        contract
-          .connect(signers[4])
-          .transfer(recipients, encReceiver, encSender, encTotal, validCommitment, validProofInputs),
+        contract.connect(signers[4]).transfer(recipients, encReceiver, encTotal, validCommitment, validProofInputs),
       ).to.be.revertedWithCustomError(contract, "InvalidRecipients");
     });
 
@@ -335,13 +325,10 @@ describe("PrivateTransfer", function () {
       // signers[1] appears twice
       const recipients = [signers[1].address, signers[1].address, signers[2].address, signers[3].address];
       const encReceiver = [fakeCiphertext(130), fakeCiphertext(131), fakeCiphertext(132), fakeCiphertext(133)];
-      const encSender = [fakeCiphertext(134), fakeCiphertext(135), fakeCiphertext(136), fakeCiphertext(137)];
       const encTotal = fakeCiphertext(138);
 
       await expect(
-        contract
-          .connect(signers[4])
-          .transfer(recipients, encReceiver, encSender, encTotal, validCommitment, validProofInputs),
+        contract.connect(signers[4]).transfer(recipients, encReceiver, encTotal, validCommitment, validProofInputs),
       ).to.be.revertedWithCustomError(contract, "InvalidRecipients");
     });
 
@@ -362,32 +349,26 @@ describe("PrivateTransfer", function () {
       // signers[11] tries to transfer (pool has only 2 users, need >= 5)
       const recipients = [signers[12].address, signers[13].address, signers[14].address, signers[15].address];
       const encReceiver = [fakeCiphertext(140), fakeCiphertext(141), fakeCiphertext(142), fakeCiphertext(143)];
-      const encSender = [fakeCiphertext(144), fakeCiphertext(145), fakeCiphertext(146), fakeCiphertext(147)];
       const encTotal = fakeCiphertext(148);
 
       await expect(
-        fresh
-          .connect(signers[11])
-          .transfer(recipients, encReceiver, encSender, encTotal, validCommitment, validProofInputs),
+        fresh.connect(signers[11]).transfer(recipients, encReceiver, encTotal, validCommitment, validProofInputs),
       ).to.be.revertedWithCustomError(fresh, "InsufficientPool");
     });
 
     it("reverts when the same commitment is reused (double-spend)", async function () {
       const recipients = [signers[1].address, signers[2].address, signers[3].address, signers[5].address];
       const encReceiver = [validCiphertext(150), validCiphertext(151), validCiphertext(152), validCiphertext(153)];
-      const encSender = [validCiphertext(154), validCiphertext(155), validCiphertext(156), validCiphertext(157)];
       const encTotal = validCiphertext(158);
 
       // First call succeeds
       await contract
         .connect(signers[4])
-        .transfer(recipients, encReceiver, encSender, encTotal, validCommitment3, validProofInputs);
+        .transfer(recipients, encReceiver, encTotal, validCommitment3, validProofInputs);
 
       // Re-submitting the same commitment must revert
       await expect(
-        contract
-          .connect(signers[4])
-          .transfer(recipients, encReceiver, encSender, encTotal, validCommitment3, validProofInputs),
+        contract.connect(signers[4]).transfer(recipients, encReceiver, encTotal, validCommitment3, validProofInputs),
       ).to.be.revertedWithCustomError(contract, "TransferAlreadyUsed");
     });
 

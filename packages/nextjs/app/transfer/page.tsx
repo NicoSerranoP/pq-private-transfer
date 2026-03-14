@@ -1,15 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  decrypt,
-  deserializeCiphertext,
-  encrypt,
-  homomorphicSum,
-  proveTransfer,
-  serializeCiphertext,
-  serializePublicKey,
-} from "@pq/crypto";
+import { decrypt, deserializeCiphertext, encrypt, proveTransfer, serializeCiphertext } from "@pq/crypto";
 import type { NextPage } from "next";
 import { hexToBytes, isAddress } from "viem";
 import { useAccount, usePublicClient } from "wagmi";
@@ -24,6 +16,10 @@ import { loadSecretKey } from "~~/utils/pq/keyStorage";
 import { notification } from "~~/utils/scaffold-eth";
 
 const N = 4; // 1 real recipient + 3 dummies
+
+function makeZeroPolynomial(): bigint[] {
+  return new Array<bigint>(1024).fill(0n);
+}
 
 const TransferPage: NextPage = () => {
   const { address: connectedAddress } = useAccount();
@@ -165,14 +161,6 @@ const TransferPage: NextPage = () => {
         ReturnType<typeof encrypt>,
       ];
 
-      // Encrypt each amount under the sender's pk (for sender deduction)
-      const encBalanceToUpdateSender = amounts.map(amt => encrypt(amt, pkSender)) as [
-        ReturnType<typeof encrypt>,
-        ReturnType<typeof encrypt>,
-        ReturnType<typeof encrypt>,
-        ReturnType<typeof encrypt>,
-      ];
-
       // Encrypt total under sender's pk
       const encTotal = encrypt(total, pkSender);
 
@@ -183,7 +171,6 @@ const TransferPage: NextPage = () => {
           pks,
           encBalanceSender,
           encBalanceToUpdateReceiver,
-          encBalanceToUpdateSender,
           encTotal,
         },
         {
@@ -191,9 +178,8 @@ const TransferPage: NextPage = () => {
           plainBalance,
           amounts,
           total,
-          rReceiver: [[], [], [], []] as any,
-          rSender: [[], [], [], []] as any,
-          rTotal: [] as any,
+          rReceiver: [makeZeroPolynomial(), makeZeroPolynomial(), makeZeroPolynomial(), makeZeroPolynomial()],
+          rTotal: makeZeroPolynomial(),
         },
       );
 
@@ -204,7 +190,6 @@ const TransferPage: NextPage = () => {
         args: [
           allAddresses,
           encBalanceToUpdateReceiver.map(ct => toHex(serializeCiphertext(ct))),
-          encBalanceToUpdateSender.map(ct => toHex(serializeCiphertext(ct))),
           toHex(serializeCiphertext(encTotal)),
           toBytes32(proof.commitment) as `0x${string}`,
           toHex(proof.inputs),
