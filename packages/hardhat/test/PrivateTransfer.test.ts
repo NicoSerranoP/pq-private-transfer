@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import { network } from "hardhat";
 import { keccak256, toUtf8Bytes, parseEther } from "ethers";
+import { formatUsd, GAS_TRACKER_GWEI, usdFromGas } from "./utils/gas.js";
 
 const N = 1024;
 const CIPHERTEXT_BYTES = 8192;
@@ -55,6 +56,18 @@ describe("PrivateTransfer", function () {
   let ethers: any;
   // Fixed signers — never call network.connect() inside test cases
   let signers: any[];
+  let transferGasThisTest = 0n;
+
+  async function trackTransferGas(txPromise: Promise<any>, label: string) {
+    const tx = await txPromise;
+    const receipt = await tx.wait();
+    transferGasThisTest += receipt.gasUsed;
+
+    const avgUsd = formatUsd(usdFromGas(receipt.gasUsed, GAS_TRACKER_GWEI.average));
+
+    console.log(`[gas][transfer] ${label}: ${receipt.gasUsed.toString()} gas | USD avg: ${avgUsd}`);
+    return receipt;
+  }
 
   before(async function () {
     const conn = await (network as any).connect();
@@ -224,7 +237,21 @@ describe("PrivateTransfer", function () {
       });
     });
 
+    beforeEach(function () {
+      transferGasThisTest = 0n;
+    });
+
+    afterEach(function () {
+      const avgUsd = formatUsd(usdFromGas(transferGasThisTest, GAS_TRACKER_GWEI.average));
+
+      console.log(
+        `[gas][transfer][test] ${this.currentTest?.fullTitle()}: ${transferGasThisTest.toString()} gas | USD avg: ${avgUsd}`,
+      );
+    });
+
     it("updates sender and all 4 recipient encrypted balances", async function () {
+      const startTime = Date.now();
+
       const recipients = [signers[1].address, signers[2].address, signers[3].address, signers[5].address];
       // Use validCiphertext so RingRegev.sub/add won't panic (coefficients must be < Q)
       const encReceiver = [validCiphertext(60), validCiphertext(61), validCiphertext(62), validCiphertext(63)];
@@ -234,9 +261,14 @@ describe("PrivateTransfer", function () {
       const senderBalBefore = (await contract.accounts(signers[4].address)).encryptedBalance;
       const recv0BalBefore = (await contract.accounts(signers[1].address)).encryptedBalance;
 
-      await contract
-        .connect(signers[4])
-        .transfer(recipients, encReceiver, encSender, encTotal, validCommitment, validProofInputs);
+      await trackTransferGas(
+        contract
+          .connect(signers[4])
+          .transfer(recipients, encReceiver, encSender, encTotal, validCommitment, validProofInputs),
+        "updates sender and recipients",
+      );
+
+      console.log(`[time][transfer] execution time: ${(Date.now() - startTime) / 1000} seconds`);
 
       // Sender balance changed (RingRegev.sub applied)
       const senderAcc = await contract.accounts(signers[4].address);
@@ -248,18 +280,22 @@ describe("PrivateTransfer", function () {
     });
 
     it("emits Transferred event with correct sender and recipients", async function () {
+      const startTime = Date.now();
+
       const recipients = [signers[1].address, signers[2].address, signers[3].address, signers[5].address];
       const encReceiver = [validCiphertext(70), validCiphertext(71), validCiphertext(72), validCiphertext(73)];
       const encSender = [validCiphertext(74), validCiphertext(75), validCiphertext(76), validCiphertext(77)];
       const encTotal = validCiphertext(78);
 
-      await expect(
-        contract
-          .connect(signers[4])
-          .transfer(recipients, encReceiver, encSender, encTotal, validCommitment2, validProofInputs),
-      )
-        .to.emit(contract, "Transferred")
-        .withArgs(signers[4].address, recipients);
+      const transferTx = contract
+        .connect(signers[4])
+        .transfer(recipients, encReceiver, encSender, encTotal, validCommitment2, validProofInputs);
+
+      console.log(`[time][transfer] transfer call (before wait): ${(Date.now() - startTime) / 1000} seconds`);
+
+      await expect(transferTx).to.emit(contract, "Transferred").withArgs(signers[4].address, recipients);
+
+      await trackTransferGas(transferTx, "emits Transferred event");
     });
 
     it("reverts if recipient array lengths mismatch", async function () {
@@ -379,9 +415,12 @@ describe("PrivateTransfer", function () {
       const encTotal = validCiphertext(158);
 
       // First call succeeds
-      await contract
-        .connect(signers[4])
-        .transfer(recipients, encReceiver, encSender, encTotal, validCommitment3, validProofInputs);
+      await trackTransferGas(
+        contract
+          .connect(signers[4])
+          .transfer(recipients, encReceiver, encSender, encTotal, validCommitment3, validProofInputs),
+        "first transfer before double-spend check",
+      );
 
       // Re-submitting the same commitment must revert
       await expect(
